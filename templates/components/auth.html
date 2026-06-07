@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}ПОРТАЛ1409: Вход{% endblock %}
+{% block body_align %}center{% endblock %}
+
+{% block body %}
+
+<!-- Loading overlay -->
+<div id="authOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-overlay__label">Вход в аккаунт...</div>
+</div>
+
+<div class="auth-wrapper">
+    <!-- Logo -->
+    <div class="auth-logo">
+        <img src="/static/favicon.png" alt="1409">
+    </div>
+
+    <!-- Auth card -->
+    <div class="auth-card">
+        <!-- Tab switcher -->
+        <div class="auth-tabs">
+            <button class="auth-tab-btn active" onclick="switchAuthTab('phone')">По телефону</button>
+            <button class="auth-tab-btn"         onclick="switchAuthTab('email')">По email</button>
+        </div>
+
+        <!-- Phone form -->
+        <form id="phone-form" class="auth-form active">
+            <input class="auth-input" type="tel" id="phone"
+                   placeholder="Номер телефона" inputmode="numeric"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+            <div id="code-section" style="display:none; flex-direction:column; gap:15px;">
+                <input class="auth-input" type="text" id="sms-code"
+                       placeholder="Код из СМС" inputmode="numeric">
+                <button type="button" id="verify-btn" class="auth-submit">
+                    <span>Подтвердить</span>
+                    <img src="/static/1409 id logo.png" class="auth-id-logo" alt="ID">
+                </button>
+            </div>
+
+            <button type="submit" id="send-btn" class="auth-submit">
+                <span>Получить код</span>
+                <img src="/static/1409 id logo.png" class="auth-id-logo" alt="ID">
+            </button>
+        </form>
+
+        <!-- Email form -->
+        <form id="email-form" class="auth-form">
+            <input class="auth-input" type="text"     id="login-field" placeholder="Почта">
+            <input class="auth-input" type="password" id="pass-field"  placeholder="Пароль">
+            <button type="submit" class="auth-submit">
+                <span>Войти с</span>
+                <img src="/static/1409 id logo.png" class="auth-id-logo" alt="ID">
+            </button>
+        </form>
+
+        <div id="auth-error" class="auth-alert"></div>
+        <a href="/help" class="auth-support-link">Техподдержка</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="auth-footer">
+        <img src="/static/departament-logo.png" alt="DIT">
+        <div class="auth-footer-text">Создано в Школе 1409 при участии учащихся</div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let userType = null;
+    const overlay  = document.getElementById('authOverlay');
+    const errorDiv = document.getElementById('auth-error');
+
+    function switchAuthTab(type) {
+        document.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        if (type === 'phone') {
+            document.querySelector('.auth-tab-btn:nth-child(1)').classList.add('active');
+            document.getElementById('phone-form').classList.add('active');
+        } else {
+            document.querySelector('.auth-tab-btn:nth-child(2)').classList.add('active');
+            document.getElementById('email-form').classList.add('active');
+        }
+        errorDiv.textContent = '';
+    }
+
+    // Phone: send code
+    document.getElementById('phone-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const phone = document.getElementById('phone').value;
+        if (!phone.match(/^[0-9]{11}$/)) { errorDiv.textContent = 'Введите 11 цифр'; return; }
+
+        overlay.classList.add('active');
+        errorDiv.textContent = '';
+        try {
+            const [t, s] = await Promise.all([
+                fetch('/api/teacher/login/phone-send', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({phone}) }),
+                fetch('/api/student/login/phone-send', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({phone}) })
+            ]);
+            if (t.ok)      userType = 'teacher';
+            else if (s.ok) userType = 'student';
+
+            if (userType) {
+                document.getElementById('code-section').style.display = 'flex';
+                document.getElementById('send-btn').style.display = 'none';
+            } else {
+                errorDiv.textContent = 'Пользователь не найден';
+            }
+        } catch { errorDiv.textContent = 'Ошибка сети'; }
+        finally { overlay.classList.remove('active'); }
+    });
+
+    // Phone: verify code
+    document.getElementById('verify-btn').addEventListener('click', async () => {
+        const phone = document.getElementById('phone').value;
+        const code  = document.getElementById('sms-code').value;
+        if (!code.match(/^[0-9]{4}$/)) { errorDiv.textContent = 'Код — 4 цифры'; return; }
+
+        overlay.classList.add('active');
+        try {
+            const res = await fetch(`/api/${userType}/login/phone-check`, {
+                method: 'POST', headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({phone, code})
+            });
+            if (res.ok) window.location.href = '/';
+            else { const d = await res.json(); errorDiv.textContent = d.message || 'Неверный код'; }
+        } catch { errorDiv.textContent = 'Ошибка сети'; }
+        finally { overlay.classList.remove('active'); }
+    });
+
+    // Email: login
+    document.getElementById('email-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const login    = document.getElementById('login-field').value;
+        const password = document.getElementById('pass-field').value;
+
+        overlay.classList.add('active');
+        errorDiv.textContent = '';
+        try {
+            const res = await fetch('/api/teacher/login', {
+                method: 'POST', headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({login, password})
+            });
+            if (res.ok) window.location.href = '/';
+            else errorDiv.textContent = 'Неверный логин или пароль';
+        } catch { errorDiv.textContent = 'Ошибка сети'; }
+        finally { overlay.classList.remove('active'); }
+    });
+</script>
+{% endblock %}

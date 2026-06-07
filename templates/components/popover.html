@@ -1,0 +1,114 @@
+<!-- =====================================================
+     1409 SDK — Popover / Modal / Toast Snippets
+     ===================================================== -->
+
+<!-- ── 1. CONFIRM DIALOG ────────────────────────────── -->
+<div class="popover-overlay" id="confirmPopup">
+    <div class="popover">
+        <button class="popover__close" onclick="closePopover('confirmPopup')">&times;</button>
+        <h2 class="popover__title">Подтверждение</h2>
+        <p class="popover__body">
+            Вы уверены, что хотите выполнить это действие?
+        </p>
+        <div class="popover__actions">
+            <button class="popover__btn popover__btn--cancel"
+                    onclick="closePopover('confirmPopup')">Отмена</button>
+            <button class="popover__btn popover__btn--confirm"
+                    onclick="onConfirm()">Подтвердить</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ── 2. INFO / CONTENT POPOVER ────────────────────── -->
+<div class="popover-overlay" id="infoPopup">
+    <div class="popover">
+        <button class="popover__close" onclick="closePopover('infoPopup')">&times;</button>
+        <h2 class="popover__title">Объявление</h2>
+        <div class="popover__content" id="infoPopupContent">
+            Текст объявления или другой длинный контент...
+        </div>
+        <p id="infoPopupAuthor" style="font-size:0.85rem; color:var(--text-muted); text-align:right;"></p>
+    </div>
+</div>
+
+
+<!-- ── 3. LIST POPOVER (друзья, участники) ──────────── -->
+<div class="popover-overlay" id="listPopup">
+    <div class="popover">
+        <button class="popover__close" onclick="closePopover('listPopup')">&times;</button>
+        <h2 class="popover__title">Список</h2>
+        <div class="popover__list" id="listPopupItems">
+            <!-- list-item elements go here -->
+            <div class="empty-state">Список пуст</div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ── 4. QR FULLSCREEN POPOVER ─────────────────────── -->
+<div class="popover-overlay" id="qrPopup">
+    <div class="popover popover--fullscreen">
+        <div class="popover__qr" id="qrPopupCode">
+            <!-- QRCode renders here -->
+        </div>
+        <button class="popover__btn popover__btn--cancel"
+                onclick="closePopover('qrPopup')"
+                style="display:flex; align-items:center; gap:8px;">
+            <i data-lucide="x"></i> Закрыть
+        </button>
+    </div>
+</div>
+
+
+<!-- ── 5. BOTTOM SHEET ───────────────────────────────── -->
+<div class="popover-overlay popover-overlay--bottom" id="bottomSheet">
+    <div class="popover popover--bottom">
+        <button class="popover__close" onclick="closePopover('bottomSheet')">&times;</button>
+        <h2 class="popover__title">Действия</h2>
+        <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+            <button class="btn btn-primary" onclick="closePopover('bottomSheet')">
+                <i data-lucide="check"></i> Подтвердить
+            </button>
+            <button class="btn btn-glass" onclick="closePopover('bottomSheet')">
+                Отмена
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ── 6. TOAST (snackbar) ───────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+
+<!-- ── JS helpers ───────────────────────────────────── -->
+<script>
+    function openPopover(id)  {
+        document.getElementById(id).classList.add('shown');
+    }
+    function closePopover(id) {
+        document.getElementById(id).classList.remove('shown');
+    }
+
+    /* Close on backdrop click */
+    document.querySelectorAll('.popover-overlay').forEach(overlay => {
+        overlay.addEventListener('click', e => {
+            if (e.target === overlay) overlay.classList.remove('shown');
+        });
+    });
+
+    /* Toast helper */
+    function showToast(message, duration = 2500) {
+        const t = document.getElementById('toast');
+        t.textContent = message;
+        t.classList.add('shown');
+        setTimeout(() => t.classList.remove('shown'), duration);
+    }
+
+    /* Placeholder */
+    function onConfirm() {
+        closePopover('confirmPopup');
+        showToast('Действие выполнено');
+    }
+</script>

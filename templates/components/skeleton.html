@@ -1,0 +1,184 @@
+<!-- =====================================================
+     1409 SDK — Skeleton / Placeholder Loader
+     ===================================================== -->
+<style>
+    /* ── Shimmer animation ── */
+    @keyframes sk-shimmer {
+        0%   { background-position: -400px 0; }
+        100% { background-position:  400px 0; }
+    }
+
+    .sk {
+        background: linear-gradient(
+            90deg,
+            rgba(255,255,255,0.05) 25%,
+            rgba(255,255,255,0.13) 50%,
+            rgba(255,255,255,0.05) 75%
+        );
+        background-size: 800px 100%;
+        animation: sk-shimmer 1.6s linear infinite;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    [data-theme="light"] .sk {
+        background: linear-gradient(
+            90deg,
+            rgba(0,0,0,0.06) 25%,
+            rgba(0,0,0,0.14) 50%,
+            rgba(0,0,0,0.06) 75%
+        );
+        background-size: 800px 100%;
+        animation: sk-shimmer 1.6s linear infinite;
+    }
+
+    /* ── Card shell ── */
+    .sk-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    /* ── Row with avatar + lines ── */
+    .sk-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .sk-avatar     { width: 46px; height: 46px; border-radius: 50%; }
+    .sk-avatar--sm { width: 32px; height: 32px; border-radius: 50%; }
+    .sk-avatar--sq { width: 42px; height: 42px; border-radius: var(--radius-sm); }
+
+    .sk-lines {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .sk-line { height: 11px; }
+    .sk-line--xs   { height: 9px; }
+    .sk-line--sm   { width: 45%; }
+    .sk-line--md   { width: 70%; }
+    .sk-line--lg   { width: 90%; }
+    .sk-line--full { width: 100%; }
+
+    /* ── Image block ── */
+    .sk-img       { width: 100%; height: 176px; border-radius: var(--radius-md); }
+    .sk-img--tall { height: 240px; }
+    .sk-img--sm   { height: 100px; }
+
+    /* ── Pill / button ── */
+    .sk-pill { height: 36px; border-radius: var(--radius-full); }
+
+    /* ── Divider ── */
+    .sk-divider {
+        width: 100%;
+        height: 1px;
+        background: var(--border-color);
+        margin: 2px 0;
+    }
+
+    /* ── List item ── */
+    .sk-list-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+    }
+    .sk-list-item + .sk-list-item {
+        border-top: 1px solid var(--border-color);
+    }
+
+    /* ── Stats row ── */
+    .sk-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    .sk-stat {
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 14px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+</style>
+
+
+<!-- ── 1. Profile / Feed card ── -->
+<div class="sk-card">
+    <div class="sk-row">
+        <div class="sk sk-avatar"></div>
+        <div class="sk-lines">
+            <div class="sk sk-line sk-line--md"></div>
+            <div class="sk sk-line sk-line--xs sk-line--sm" style="opacity:.6"></div>
+        </div>
+        <div class="sk sk-pill" style="width:64px;"></div>
+    </div>
+    <div class="sk sk-img"></div>
+    <div class="sk sk-line sk-line--full"></div>
+    <div class="sk sk-line sk-line--lg"></div>
+    <div class="sk sk-line sk-line--md" style="opacity:.55;"></div>
+    <div class="sk-row" style="gap:8px; margin-top:2px;">
+        <div class="sk sk-pill" style="width:80px;"></div>
+        <div class="sk sk-pill" style="width:80px;"></div>
+    </div>
+</div>
+
+
+<!-- ── 2. List skeleton ── -->
+<div class="sk-card">
+    <div class="sk-line sk-line--sm" style="height:9px;width:90px;background:rgba(255,255,255,0.08);border-radius:6px;"></div>
+
+    <div class="sk-list-item">
+        <div class="sk sk-avatar--sq"></div>
+        <div class="sk-lines">
+            <div class="sk sk-line sk-line--md"></div>
+            <div class="sk sk-line sk-line--xs sk-line--lg" style="opacity:.6"></div>
+        </div>
+        <div class="sk sk-line" style="width:32px;height:32px;border-radius:8px;"></div>
+    </div>
+
+    <div class="sk-list-item">
+        <div class="sk sk-avatar--sq"></div>
+        <div class="sk-lines">
+            <div class="sk sk-line" style="width:55%;"></div>
+            <div class="sk sk-line sk-line--xs" style="width:80%;opacity:.6"></div>
+        </div>
+        <div class="sk sk-line" style="width:32px;height:32px;border-radius:8px;"></div>
+    </div>
+
+    <div class="sk-list-item">
+        <div class="sk sk-avatar--sq"></div>
+        <div class="sk-lines">
+            <div class="sk sk-line sk-line--lg"></div>
+            <div class="sk sk-line sk-line--xs sk-line--sm" style="opacity:.6"></div>
+        </div>
+        <div class="sk sk-line" style="width:32px;height:32px;border-radius:8px;"></div>
+    </div>
+</div>
+
+
+<!-- ── 3. Stats skeleton ── -->
+<div class="sk-stats">
+    <div class="sk-stat">
+        <div class="sk sk-line sk-line--xs" style="width:50%;opacity:.5;"></div>
+        <div class="sk sk-line" style="width:70%;height:22px;border-radius:6px;"></div>
+    </div>
+    <div class="sk-stat">
+        <div class="sk sk-line sk-line--xs" style="width:60%;opacity:.5;"></div>
+        <div class="sk sk-line" style="width:55%;height:22px;border-radius:6px;"></div>
+    </div>
+    <div class="sk-stat">
+        <div class="sk sk-line sk-line--xs" style="width:45%;opacity:.5;"></div>
+        <div class="sk sk-line" style="width:65%;height:22px;border-radius:6px;"></div>
+    </div>
+</div>

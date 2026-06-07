@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}Preview — {{ component_name }}{% endblock %}
+
+{% block body_align %}flex-start{% endblock %}
+
+{% block extra_css %}
+<style>
+    .preview-shell-wrap {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 24px;
+        padding: 32px 20px 80px;
+    }
+
+    /* Give snippet elements breathing room */
+    .preview-shell-wrap > * {
+        max-width: 560px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* ── Demo trigger bar ── */
+    .preview-demo-bar {
+        background: rgba(68,70,225,0.06);
+        border: 1px solid rgba(68,70,225,0.18);
+        border-radius: 18px;
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .preview-demo-title {
+        font-size: 0.6rem;
+        font-weight: 800;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.22);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .preview-demo-title::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(255,255,255,0.06);
+    }
+    .preview-demo-btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+    }
+    .preview-demo-btn {
+        background: rgba(68,70,225,0.15);
+        border: 1px solid rgba(68,70,225,0.28);
+        border-radius: 10px;
+        color: #9b9ef8;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 7px 16px;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: inherit;
+    }
+    .preview-demo-btn:hover {
+        background: rgba(68,70,225,0.3);
+        border-color: rgba(68,70,225,0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(68,70,225,0.25);
+        color: #c0c2ff;
+    }
+    .preview-demo-btn:active { transform: scale(0.96); }
+    .preview-demo-btn--toast {
+        background: rgba(76,175,80,0.12);
+        border-color: rgba(76,175,80,0.25);
+        color: #6fcf72;
+    }
+    .preview-demo-btn--toast:hover {
+        background: rgba(76,175,80,0.25);
+        border-color: rgba(76,175,80,0.45);
+        color: #9ef0a1;
+        box-shadow: 0 6px 20px rgba(76,175,80,0.2);
+    }
+
+    /* ── Section labels ── */
+    .preview-label {
+        font-size: 0.6rem;
+        font-weight: 800;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.2);
+        padding: 4px 0 2px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        margin-top: 4px;
+        width: 100%;
+        max-width: 560px;
+    }
+    .preview-label:first-of-type { border-top: none; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="preview-shell-wrap">
+    {{ component_html | safe }}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        const wrap = document.querySelector('.preview-shell-wrap');
+
+        /* ── 1. Section labels from HTML comments ── */
+        wrap.childNodes.forEach(node => {
+            if (node.nodeType === Node.COMMENT_NODE) {
+                const text = node.textContent
+                    .replace(/─+/g, '').replace(/[═]+/g, '')
+                    .trim().replace(/^\d+\.\s*/, '');
+                if (text) {
+                    const label = document.createElement('div');
+                    label.className = 'preview-label';
+                    label.textContent = text;
+                    wrap.insertBefore(label, node.nextSibling);
+                }
+            }
+        });
+
+        /* ── 2. QR placeholder ── */
+        const qrEl = document.getElementById('qrPopupCode');
+        if (qrEl && !qrEl.children.length) {
+            qrEl.innerHTML = `
+                <div style="width:160px;height:160px;background:rgba(255,255,255,0.07);border:2px dashed rgba(255,255,255,0.18);border-radius:16px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:rgba(255,255,255,0.35);font-size:0.72rem;font-weight:700;letter-spacing:1px;">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="3" height="3"/><rect x="19" y="14" width="2" height="2"/>
+                        <rect x="14" y="19" width="2" height="2"/><rect x="18" y="18" width="3" height="3"/>
+                    </svg>
+                    QR Code
+                </div>`;
+        }
+
+        /* ── 3. Build interactive demo trigger bar ── */
+        const overlays = wrap.querySelectorAll('.popover-overlay[id]');
+        const hasToast  = wrap.querySelector('.toast');
+
+        if (overlays.length || hasToast) {
+            const bar = document.createElement('div');
+            bar.className = 'preview-demo-bar';
+
+            const titleRow = document.createElement('div');
+            titleRow.className = 'preview-demo-title';
+            titleRow.textContent = 'Demo triggers';
+            bar.appendChild(titleRow);
+
+            const btnsRow = document.createElement('div');
+            btnsRow.className = 'preview-demo-btns';
+
+            overlays.forEach(overlay => {
+                const titleEl = overlay.querySelector('.popover__title, .popover__body');
+                const label   = titleEl?.textContent?.trim().slice(0, 28) || overlay.id;
+
+                const btn = document.createElement('button');
+                btn.className = 'preview-demo-btn';
+                btn.innerHTML = `<svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg> ${label}`;
+                btn.onclick = () => {
+                    if (typeof openPopover === 'function') openPopover(overlay.id);
+                };
+                btnsRow.appendChild(btn);
+            });
+
+            if (hasToast && typeof showToast === 'function') {
+                const toastBtn = document.createElement('button');
+                toastBtn.className = 'preview-demo-btn preview-demo-btn--toast';
+                toastBtn.innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Toast`;
+                toastBtn.onclick = () => showToast('👋 Это toast-уведомление!');
+                btnsRow.appendChild(toastBtn);
+            }
+
+            bar.appendChild(btnsRow);
+            wrap.prepend(bar);
+        }
+    });
+</script>
+{% endblock %}

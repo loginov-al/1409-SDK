@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ПОРТАЛ1409{% endblock %}</title>
+    <link rel="icon" href="/static/favicon.png">
+
+    <!-- 1409 SDK CSS -->
+    <link rel="stylesheet" href="/static/css/tokens.css">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/background.css">
+    <link rel="stylesheet" href="/static/css/auth.css">
+    <link rel="stylesheet" href="/static/css/card.css">
+    <link rel="stylesheet" href="/static/css/badge.css">
+    <link rel="stylesheet" href="/static/css/popover.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+
+    {% block extra_css %}{% endblock %}
+
+    <style>
+        body {
+            display: flex;
+            align-items: {% block body_align %}flex-start{% endblock %};
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Page loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="page-loader__content">
+            <img src="/static/favicon.png" alt="1409">
+            <div class="page-loader__label">ПОРТАЛ1409</div>
+        </div>
+    </div>
+
+    {% block body %}{% endblock %}
+
+    <!-- Theme init -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('pageLoader');
+            if (loader) setTimeout(() => loader.classList.add('hidden'), 600);
+        });
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

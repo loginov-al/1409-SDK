@@ -1,0 +1,223 @@
+/* =====================================================
+   1409 SDK — Popover / Modal / Popup
+   ===================================================== */
+
+/* ---- Overlay backdrop ---- */
+.popover-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    visibility: hidden;
+    opacity: 0;
+    transition: all var(--transition-base);
+}
+
+.popover-overlay.shown {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* ---- Popover panel ---- */
+.popover {
+    background: var(--bg-tertiary);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 25px 50px var(--shadow-color);
+    position: relative;
+    animation: popoverIn 0.3s ease;
+}
+
+@keyframes popoverIn {
+    from { opacity: 0; transform: scale(0.85) translateY(-20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ---- Close button (top-right ×) ---- */
+.popover__close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    line-height: 1;
+}
+
+.popover__close:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+/* ---- Title ---- */
+.popover__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+    padding-right: 30px; /* avoid overlap with close btn */
+}
+
+/* ---- Body text ---- */
+.popover__body {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* ---- Action buttons row ---- */
+.popover__actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.popover__btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    flex: 1;
+}
+
+.popover__btn:hover { transform: translateY(-2px); }
+
+.popover__btn--cancel {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+
+.popover__btn--confirm {
+    background: var(--accent);
+    color: white;
+}
+
+.popover__btn--danger {
+    background: #e63530;
+    color: white;
+}
+
+/* ---- Content area (for rich body content) ---- */
+.popover__content {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 15px;
+    max-height: 40vh;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* ---- Scrollable list inside popover ---- */
+.popover__list {
+    max-height: 50vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ---- QR fullscreen variant ---- */
+.popover--fullscreen {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.popover--fullscreen .popover__qr {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ---- Bottom sheet variant ---- */
+.popover-overlay--bottom {
+    align-items: flex-end;
+}
+
+.popover--bottom {
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding: 30px 24px 40px;
+    animation: slideUp 0.35s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+}
+
+/* ---- Toast / snackbar (lightweight popover) ---- */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--bg-tertiary);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-full);
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    z-index: 3000;
+    opacity: 0;
+    transition: all 0.35s ease;
+    white-space: nowrap;
+}
+
+.toast.shown {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ---- Empty state ---- */
+.empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 20px;
+    font-size: 0.9rem;
+}

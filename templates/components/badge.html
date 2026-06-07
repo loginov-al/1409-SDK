@@ -1,0 +1,80 @@
+<!-- =====================================================
+     1409 SDK — Badge & Chip Snippets
+     ===================================================== -->
+
+<!-- ── 1. BADGES ────────────────────────────────────── -->
+<div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+    <span class="badge badge-primary">Активен</span>
+    <span class="badge badge-success">Подтверждён</span>
+    <span class="badge badge-warning">Ожидание</span>
+    <span class="badge badge-danger">Отклонён</span>
+    <span class="badge badge-neutral">Архив</span>
+    <span class="badge badge-glass">
+        <span class="status-dot status-dot--online"></span>
+        Онлайн
+    </span>
+</div>
+
+
+<!-- ── 2. STATUS DOTS ────────────────────────────────── -->
+<div style="display:flex; gap:16px; align-items:center;">
+    <span class="status-dot status-dot--online"></span>
+    <span class="status-dot status-dot--away"></span>
+    <span class="status-dot status-dot--offline"></span>
+    <span class="status-dot status-dot--error"></span>
+</div>
+
+
+<!-- ── 3. CHIPS ──────────────────────────────────────── -->
+<div class="tag-list">
+    <button class="chip active">
+        <i data-lucide="users" style="width:16px;height:16px;"></i> Учителя
+    </button>
+    <button class="chip">
+        <i data-lucide="user" style="width:16px;height:16px;"></i> Ученики
+    </button>
+    <button class="chip">
+        <i data-lucide="building" style="width:16px;height:16px;"></i> Модерн
+    </button>
+</div>
+
+
+<!-- ── 4. SCORE PLAQUE ───────────────────────────────── -->
+<div class="score-plaque">
+    <i data-lucide="star" style="width:16px;height:16px;"></i>
+    128 баллов
+</div>
+
+
+<!-- ── 5. PROGRESS PLAQUE (кнопка с прогрессом) ─────── -->
+<div class="progress-plaque">
+    <div class="progress-plaque__fill" id="progressFill" style="width: 60%;"></div>
+    <span class="progress-plaque__label">Показать охране</span>
+</div>
+
+
+<!-- ── 6. ICON WITH NOTIFICATION BADGE ───────────────── -->
+<div style="position:relative; display:inline-flex;">
+    <i data-lucide="bell" style="width:28px; height:28px;"></i>
+    <span class="notif-badge">3</span>
+</div>
+
+
+<!-- ── 7. MENU ICON CHIPS ─────────────────────────────── -->
+<div style="display:flex; flex-wrap:wrap; gap:12px;">
+    <div class="chip">
+        <img src="/static/menu/events-minimalistic-icon.png" alt="events"> Мероприятия
+    </div>
+    <div class="chip">
+        <img src="/static/menu/guests-minimalistic-icon.png" alt="guests"> Гости
+    </div>
+    <div class="chip">
+        <img src="/static/menu/elevator-minimalistic-icon.png" alt="lift"> Лифт
+    </div>
+    <div class="chip">
+        <img src="/static/menu/accounts-minimalistic-icon.png" alt="accounts"> Аккаунты
+    </div>
+    <div class="chip">
+        <img src="/static/menu/tech-support-minimalistic-icon.png" alt="support"> Поддержка
+    </div>
+</div>

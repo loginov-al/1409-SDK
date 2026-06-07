@@ -1,0 +1,110 @@
+<!-- =====================================================
+     1409 SDK — Card Component Snippets
+     Copy-paste these blocks into your templates.
+     ===================================================== -->
+
+<!-- ── 1. GLASS CARD (generic) ──────────────────────── -->
+<div class="card">
+    <div class="section-title">Заголовок</div>
+    <p style="color: var(--text-secondary);">Контент карточки.</p>
+</div>
+
+
+<!-- ── 2. PROFILE CARD ──────────────────────────────── -->
+<div class="card profile-card">
+    <!-- Avatar -->
+    <div class="avatar">
+        <img src="/static/default_avatar.png" alt="avatar"
+             style="width:100%; height:100%; object-fit:cover;"
+             onerror="this.style.display='none'">
+        <div class="avatar-edit-overlay">
+            <i data-lucide="camera"></i>
+        </div>
+    </div>
+
+    <h1 class="profile-name">Иванов Иван Иванович</h1>
+    <div class="profile-sub">Учитель математики</div>
+
+    <!-- Info rows -->
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="info-icon"><i data-lucide="phone"></i></div>
+            <div class="info-content">
+                <div class="info-label">Телефон</div>
+                <div class="info-value">+7 (999) 000-00-00</div>
+            </div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-icon"><i data-lucide="building"></i></div>
+            <div class="info-content">
+                <div class="info-label">Корпус</div>
+                <div class="info-value">Модерн</div>
+            </div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-icon"><i data-lucide="info"></i></div>
+            <div class="info-content">
+                <div class="info-label">Дополнительно</div>
+                <div class="info-value">Классный руководитель 10А</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="card-actions">
+        <button class="btn btn-primary">
+            <i data-lucide="user-plus"></i> Дружить
+        </button>
+        <a href="tel:+79990000000" class="btn" style="background:#4caf50; color:white;">
+            <i data-lucide="phone"></i> Позвонить
+        </a>
+    </div>
+</div>
+
+
+<!-- ── 3. COVER HERO CARD (с фоновым изображением) ── -->
+<div class="cover-card">
+    <div class="cover-card__hero">
+        <!-- Back button -->
+        <button class="nav-close" onclick="history.back()" style="position:absolute; top:20px; left:20px; background:rgba(255,255,255,0.2); border:none; color:white; border-radius:50%; width:50px; height:50px; cursor:pointer;">
+            <i data-lucide="arrow-left"></i>
+        </button>
+        <div class="cover-card__logo">
+            <img src="/static/1409 logo.png" alt="1409" style="height:60px; margin-bottom:15px;">
+            <h1>Разрешение на выход</h1>
+        </div>
+    </div>
+
+    <div class="cover-card__body">
+        <div class="student-info" style="text-align:center; margin-bottom:30px;">
+            <h2 style="font-size:1.5rem; color:#333; margin-bottom:10px;">Иванов Иван</h2>
+            <p style="color:#666;">Класс: 10А</p>
+            <p style="color:#666;">Учитель: Петрова М.И.</p>
+        </div>
+    </div>
+</div>
+
+
+<!-- ── 4. COMPACT LIST ITEM ───────────────────────── -->
+<a href="/profile/1" class="list-item">
+    <img class="list-item__avatar" src="/static/default_avatar.png" alt="avatar">
+    <div>
+        <div class="list-item__name">Иванов Иван</div>
+        <div class="list-item__meta">10А • Модерн</div>
+    </div>
+</a>
+
+
+<!-- ── 5. STAT CARD GRID ──────────────────────────── -->
+<div style="display:grid; grid-template-columns: repeat(2,1fr); gap:15px;">
+    <div class="stat-card">
+        <div class="stat-card__value">128</div>
+        <div class="stat-card__label">Баллов</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-card__value">3</div>
+        <div class="stat-card__label">Место</div>
+    </div>
+</div>

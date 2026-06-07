@@ -1,0 +1,236 @@
+/* =====================================================
+   1409 SDK — Base Reset & Body
+   ===================================================== */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background: var(--bg-primary);
+    transition: background var(--transition-base);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Montserrat', sans-serif;
+    background: transparent;
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: color var(--transition-base);
+    isolation: isolate; /* creates stacking context so ::before/::after z-index:-1 renders above html bg */
+}
+
+/* Ambient animated background clouds */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background:
+        radial-gradient(ellipse 80% 60% at 30% 20%, var(--cloud1-color1) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 50% at 70% 30%, var(--cloud1-color2) 0%, transparent 50%);
+    z-index: -1;
+    animation: cloudFloat 20s ease-in-out infinite, cloudFadeIn 2s ease-out forwards;
+    transition: background var(--transition-base);
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: -30%; left: -30%;
+    width: 160%; height: 160%;
+    background:
+        radial-gradient(ellipse 50% 40% at 60% 25%, var(--cloud2-color1) 0%, transparent 45%),
+        radial-gradient(ellipse 40% 35% at 40% 35%, var(--cloud2-color2) 0%, transparent 40%);
+    z-index: -1;
+    animation: cloudFloat2 25s ease-in-out infinite reverse, cloudFadeIn 3s ease-out forwards;
+    transition: background var(--transition-base);
+}
+
+@keyframes cloudFadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes cloudFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25%       { transform: translate(5%, 3%) scale(1.05); }
+    50%       { transform: translate(-3%, 5%) scale(0.98); }
+    75%       { transform: translate(-5%, -2%) scale(1.02); }
+}
+
+@keyframes cloudFloat2 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33%       { transform: translate(-4%, 4%) rotate(2deg); }
+    66%       { transform: translate(4%, -3%) rotate(-2deg); }
+}
+
+/* Page entry animation */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Page loader ---- */
+.page-loader {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.page-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.page-loader__content {
+    text-align: center;
+    animation: loaderPulse 1.5s ease-in-out infinite;
+}
+
+.page-loader__content img {
+    height: 80px;
+    margin-bottom: 1rem;
+}
+
+.page-loader__label {
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+}
+
+@keyframes loaderPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%       { transform: scale(1.1); opacity: 0.7; }
+}
+
+/* ---- Loading spinner ---- */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ---- Generic overlay loader ---- */
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 2000;
+    visibility: hidden;
+    opacity: 0;
+    transition: all var(--transition-base);
+}
+
+.loading-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.loading-overlay__label {
+    font-weight: 700;
+    color: white;
+}
+
+/* ---- Container ---- */
+.container {
+    padding: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ---- Buttons ---- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 24px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(68, 70, 225, 0.4);
+}
+
+.btn-primary:active  { transform: translateY(0); }
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+}
+
+.btn-glass:hover { background: var(--bg-hover); }
+
+/* ---- Back / close nav button ---- */
+.nav-close {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: background var(--transition-base);
+}
+
+.nav-close:hover { background: var(--bg-hover); }
+
+/* ---- Alert ---- */
+.alert {
+    font-size: 0.85rem;
+    text-align: center;
+    font-weight: 600;
+    min-height: 1.2rem;
+}
+
+.alert-error   { color: #ff4d4d; }
+.alert-success { color: #4caf50; }

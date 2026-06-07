@@ -1,0 +1,260 @@
+/* =====================================================
+   1409 SDK — Card Components
+   ===================================================== */
+
+/* ---- Base glass card ---- */
+.card {
+    background: var(--bg-tertiary);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 30px;
+    box-shadow: var(--shadow-card);
+}
+
+/* ---- Profile card ---- */
+.profile-card {
+    text-align: center;
+}
+
+.profile-card .avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--accent);
+    background: var(--bg-secondary);
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-card .avatar-edit-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    color: white;
+}
+
+.profile-card .avatar:hover .avatar-edit-overlay { opacity: 1; }
+
+.profile-card .profile-name {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.profile-card .profile-sub {
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* ---- Info grid (rows inside profile card) ---- */
+.info-grid {
+    display: grid;
+    gap: 15px;
+    text-align: left;
+    margin-top: 30px;
+}
+
+.info-item {
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid var(--border-light);
+    width: 100%;
+}
+
+.info-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.info-content { flex: 1; min-width: 0; }
+
+.info-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ---- Action buttons row inside card ---- */
+.card-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* ---- Compact list card (horizontal item) ---- */
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.list-item:hover {
+    background: var(--bg-hover);
+    transform: translateX(5px);
+}
+
+.list-item__avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    flex-shrink: 0;
+}
+
+.list-item__name {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.list-item__meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* ---- Cover hero card (image top + white block below) ---- */
+.cover-card {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.cover-card__hero {
+    padding: 30px 0 60px;
+    background: url('/static/wallpaper.png') center / cover;
+    position: relative;
+    border-radius: 0 0 30px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: boxOpen 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cover-card__logo {
+    color: white;
+    text-align: center;
+    padding: 0 20px;
+    z-index: 2;
+}
+
+.cover-card__logo h1 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cover-card__body {
+    background: white;
+    border-radius: 30px 30px 0 0;
+    padding: 30px 20px;
+    margin: -40px 15px 0;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+/* ---- Stats card ---- */
+.stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    text-align: center;
+}
+
+.stat-card__value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+}
+
+.stat-card__label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-weight: 600;
+}
+
+/* ---- Section label ---- */
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+/* Animations */
+@keyframes boxOpen {
+    0%   { transform: scale(0.3); opacity: 0; }
+    50%  { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (min-width: 601px) {
+    .cover-card {
+        padding: 20px 0;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-card { padding: 25px 20px; }
+    .profile-card .profile-name { font-size: 1.4rem; }
+}
