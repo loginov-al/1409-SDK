@@ -1,0 +1,232 @@
+<!-- =====================================================
+     1409 SDK — Tabs / Segmented Control Snippets
+     ===================================================== -->
+<style>
+    /* ════════════════════════════════════
+       Segmented control (iOS-style)
+    ════════════════════════════════════ */
+    .seg {
+        display: inline-flex;
+        align-items: center;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 3px;
+        gap: 2px;
+        width: 100%;
+    }
+
+    .seg__btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        height: 34px;
+        border-radius: 10px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+        font-family: inherit;
+        white-space: nowrap;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .seg__btn:hover { color: var(--text-secondary); }
+
+    .seg__btn.active {
+        background: var(--glass-bg);
+        color: var(--text-primary);
+        box-shadow: 0 1px 6px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    /* Sizes */
+    .seg--sm .seg__btn { height: 28px; font-size: 0.75rem; border-radius: 8px; }
+    .seg--lg .seg__btn { height: 40px; font-size: 0.88rem; border-radius: 12px; }
+
+    /* ════════════════════════════════════
+       Scroll tabs (underline style)
+    ════════════════════════════════════ */
+    .tabs {
+        display: flex;
+        align-items: flex-end;
+        gap: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        border-bottom: 1px solid var(--border-color);
+        position: relative;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tabs__btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 16px 11px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: color 0.18s, border-color 0.18s;
+        font-family: inherit;
+        margin-bottom: -1px;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        flex-shrink: 0;
+    }
+
+    .tabs__btn:hover  { color: var(--text-secondary); }
+    .tabs__btn.active {
+        color: var(--text-primary);
+        border-bottom-color: var(--accent);
+        font-weight: 700;
+    }
+
+    /* Badge inside tab */
+    .tabs__btn .badge { pointer-events: none; }
+
+    /* ════════════════════════════════════
+       Tab panel (content area)
+    ════════════════════════════════════ */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ════════════════════════════════════
+       Pill tabs (rounded, spaced)
+    ════════════════════════════════════ */
+    .tabs-pill {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+    }
+    .tabs-pill::-webkit-scrollbar { display: none; }
+
+    .tabs-pill__btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: 34px;
+        padding: 0 14px;
+        border-radius: var(--radius-full);
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.18s cubic-bezier(0.34, 1.4, 0.64, 1);
+        font-family: inherit;
+        flex-shrink: 0;
+        user-select: none;
+    }
+    .tabs-pill__btn:hover { color: var(--text-secondary); background: var(--bg-hover); }
+    .tabs-pill__btn.active {
+        background: rgba(68,70,225,0.15);
+        border-color: rgba(68,70,225,0.4);
+        color: #c7d2fe;
+    }
+</style>
+
+
+<!-- ── 1. Segmented control — 2 items ── -->
+<div class="seg" id="seg1">
+    <button class="seg__btn active" onclick="setSeg('seg1', this)">Ученики</button>
+    <button class="seg__btn" onclick="setSeg('seg1', this)">Учителя</button>
+</div>
+
+
+<!-- ── 2. Segmented control — 3 items with icons ── -->
+<div class="seg" id="seg2">
+    <button class="seg__btn active" onclick="setSeg('seg2', this)">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        День
+    </button>
+    <button class="seg__btn" onclick="setSeg('seg2', this)">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Неделя
+    </button>
+    <button class="seg__btn" onclick="setSeg('seg2', this)">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Месяц
+    </button>
+</div>
+
+
+<!-- ── 3. Segmented control — small ── -->
+<div class="seg seg--sm" id="seg3" style="max-width:240px;">
+    <button class="seg__btn active" onclick="setSeg('seg3', this)">Сетка</button>
+    <button class="seg__btn" onclick="setSeg('seg3', this)">Список</button>
+    <button class="seg__btn" onclick="setSeg('seg3', this)">Карта</button>
+</div>
+
+
+<!-- ── 4. Underline scroll tabs with panels ── -->
+<div>
+    <div class="tabs" id="tabs1">
+        <button class="tabs__btn active" onclick="setTabs('tabs1', 'panels1', this, 0)">Расписание</button>
+        <button class="tabs__btn" onclick="setTabs('tabs1', 'panels1', this, 1)">
+            Домашние задания
+            <span class="badge badge--accent badge--sm">3</span>
+        </button>
+        <button class="tabs__btn" onclick="setTabs('tabs1', 'panels1', this, 2)">Оценки</button>
+        <button class="tabs__btn" onclick="setTabs('tabs1', 'panels1', this, 3)">Пропуски</button>
+    </div>
+
+    <div id="panels1" style="padding-top:16px;">
+        <div class="tab-panel active" style="color:var(--text-secondary); font-size:.85rem; padding:12px; background:var(--bg-secondary); border-radius:var(--radius-md);">
+            Панель: Расписание
+        </div>
+        <div class="tab-panel" style="color:var(--text-secondary); font-size:.85rem; padding:12px; background:var(--bg-secondary); border-radius:var(--radius-md);">
+            Панель: Домашние задания
+        </div>
+        <div class="tab-panel" style="color:var(--text-secondary); font-size:.85rem; padding:12px; background:var(--bg-secondary); border-radius:var(--radius-md);">
+            Панель: Оценки
+        </div>
+        <div class="tab-panel" style="color:var(--text-secondary); font-size:.85rem; padding:12px; background:var(--bg-secondary); border-radius:var(--radius-md);">
+            Панель: Пропуски
+        </div>
+    </div>
+</div>
+
+
+<!-- ── 5. Pill tabs (filter-style) ── -->
+<div class="tabs-pill" id="pills1">
+    <button class="tabs-pill__btn active" onclick="setPills('pills1', this)">Все</button>
+    <button class="tabs-pill__btn" onclick="setPills('pills1', this)">Модерн</button>
+    <button class="tabs-pill__btn" onclick="setPills('pills1', this)">Лицей</button>
+    <button class="tabs-pill__btn" onclick="setPills('pills1', this)">Основной</button>
+    <button class="tabs-pill__btn" onclick="setPills('pills1', this)">Спортивный</button>
+</div>
+
+<script>
+function setSeg(groupId, btn) {
+    document.querySelectorAll('#' + groupId + ' .seg__btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+function setTabs(tabsId, panelsId, btn, idx) {
+    document.querySelectorAll('#' + tabsId + ' .tabs__btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#' + panelsId + ' .tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#' + panelsId + ' .tab-panel')[idx]?.classList.add('active');
+    // Scroll into view
+    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+function setPills(groupId, btn) {
+    document.querySelectorAll('#' + groupId + ' .tabs-pill__btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
+</script>

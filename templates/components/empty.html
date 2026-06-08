@@ -1,0 +1,209 @@
+<!-- =====================================================
+     1409 SDK — Empty State Snippets
+     ===================================================== -->
+<style>
+    /* ── Base ── */
+    .empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px 24px;
+        gap: 0;
+    }
+
+    /* ── Illustration container ── */
+    .empty__illo {
+        width: 96px; height: 96px;
+        border-radius: 28px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 24px;
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    /* Soft glow behind illustration */
+    .empty__illo::before {
+        content: '';
+        position: absolute;
+        inset: -20px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(68,70,225,0.08) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .empty__illo svg,
+    .empty__illo img {
+        position: relative; z-index: 1;
+    }
+
+    /* Sizes */
+    .empty--sm .empty__illo { width: 72px; height: 72px; border-radius: 20px; margin-bottom: 18px; }
+    .empty--lg .empty__illo { width: 120px; height: 120px; border-radius: 34px; margin-bottom: 28px; }
+
+    /* ── Text ── */
+    .empty__title {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1.3;
+        margin-bottom: 8px;
+    }
+
+    .empty--sm .empty__title { font-size: 0.9rem; margin-bottom: 6px; }
+    .empty--lg .empty__title { font-size: 1.2rem; }
+
+    .empty__desc {
+        font-size: 0.83rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        line-height: 1.55;
+        max-width: 260px;
+        margin-bottom: 24px;
+    }
+
+    .empty--sm .empty__desc { font-size: 0.78rem; margin-bottom: 18px; max-width: 220px; }
+    .empty--lg .empty__desc { font-size: 0.88rem; margin-bottom: 28px; }
+
+    /* No margin when no actions follow */
+    .empty__desc:last-child { margin-bottom: 0; }
+
+    /* ── Actions ── */
+    .empty__actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        max-width: 260px;
+    }
+
+    .empty__actions .btn { width: 100%; }
+
+    /* ── Color variants for illustration bg ── */
+    .empty__illo--success { background: rgba(23,201,100,0.08); border-color: rgba(23,201,100,0.2); }
+    .empty__illo--success::before { background: radial-gradient(circle, rgba(23,201,100,0.1) 0%, transparent 70%); }
+
+    .empty__illo--warning { background: rgba(245,165,36,0.08); border-color: rgba(245,165,36,0.2); }
+    .empty__illo--warning::before { background: radial-gradient(circle, rgba(245,165,36,0.1) 0%, transparent 70%); }
+
+    .empty__illo--danger { background: rgba(230,53,48,0.08); border-color: rgba(230,53,48,0.2); }
+    .empty__illo--danger::before { background: radial-gradient(circle, rgba(230,53,48,0.1) 0%, transparent 70%); }
+
+    .empty__illo--accent { background: rgba(68,70,225,0.1); border-color: rgba(68,70,225,0.25); }
+
+    /* ── Card wrapper ── */
+    .empty--card {
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+    }
+</style>
+
+
+<!-- ── 1. No notifications ── -->
+<div class="empty">
+    <div class="empty__illo">
+        <svg width="44" height="44" fill="none" stroke="var(--text-muted)" stroke-width="1.4" viewBox="0 0 24 24">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            <line x1="2" y1="2" x2="22" y2="22" stroke-width="1.8"/>
+        </svg>
+    </div>
+    <div class="empty__title">Уведомлений нет</div>
+    <div class="empty__desc">Здесь появятся важные события и напоминания</div>
+</div>
+
+
+<!-- ── 2. No schedule (with CTA) ── -->
+<div class="empty">
+    <div class="empty__illo empty__illo--accent">
+        <svg width="44" height="44" fill="none" stroke="#818cf8" stroke-width="1.4" viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+    </div>
+    <div class="empty__title">Расписание пусто</div>
+    <div class="empty__desc">На этой неделе занятий не запланировано. Попробуйте изменить фильтр или выбрать другую неделю.</div>
+    <div class="empty__actions">
+        <button class="btn btn-primary">Следующая неделя</button>
+        <button class="btn btn-glass">Сбросить фильтры</button>
+    </div>
+</div>
+
+
+<!-- ── 3. No search results ── -->
+<div class="empty empty--sm">
+    <div class="empty__illo">
+        <svg width="34" height="34" fill="none" stroke="var(--text-muted)" stroke-width="1.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <line x1="8" y1="11" x2="14" y2="11"/>
+        </svg>
+    </div>
+    <div class="empty__title">Ничего не найдено</div>
+    <div class="empty__desc">По запросу «Математика» результатов нет</div>
+    <div class="empty__actions">
+        <button class="btn btn-glass" style="max-width:180px;">Очистить поиск</button>
+    </div>
+</div>
+
+
+<!-- ── 4. No internet ── -->
+<div class="empty empty--card">
+    <div class="empty__illo empty__illo--warning">
+        <svg width="44" height="44" fill="none" stroke="#f5a524" stroke-width="1.4" viewBox="0 0 24 24">
+            <line x1="1" y1="1" x2="23" y2="23"/>
+            <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+            <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+            <path d="M10.71 5.05A16 16 0 0 1 22.56 9"/>
+            <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+            <line x1="12" y1="20" x2="12.01" y2="20"/>
+        </svg>
+    </div>
+    <div class="empty__title">Нет подключения</div>
+    <div class="empty__desc">Проверьте интернет-соединение и попробуйте снова</div>
+    <div class="empty__actions">
+        <button class="btn btn-primary">Повторить</button>
+    </div>
+</div>
+
+
+<!-- ── 5. Error / something went wrong ── -->
+<div class="empty">
+    <div class="empty__illo empty__illo--danger">
+        <svg width="44" height="44" fill="none" stroke="#f87171" stroke-width="1.4" viewBox="0 0 24 24">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+    </div>
+    <div class="empty__title">Что-то пошло не так</div>
+    <div class="empty__desc">Не удалось загрузить данные. Мы уже знаем об этой проблеме и работаем над её решением.</div>
+    <div class="empty__actions">
+        <button class="btn btn-primary">Попробовать снова</button>
+        <button class="btn btn-ghost">На главную</button>
+    </div>
+</div>
+
+
+<!-- ── 6. Success / completed ── -->
+<div class="empty">
+    <div class="empty__illo empty__illo--success">
+        <svg width="44" height="44" fill="none" stroke="#4ade80" stroke-width="1.4" viewBox="0 0 24 24">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+    </div>
+    <div class="empty__title">Готово!</div>
+    <div class="empty__desc">Ваша заявка успешно отправлена. Ответ придёт в течение 24 часов.</div>
+    <div class="empty__actions">
+        <button class="btn btn-primary">На главную</button>
+    </div>
+</div>

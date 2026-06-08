@@ -1,0 +1,304 @@
+<!-- =====================================================
+     1409 SDK — List / Settings Row Snippets
+     ===================================================== -->
+<style>
+    /* ════════════════════════════════════
+       List group container
+    ════════════════════════════════════ */
+    .list-group {
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+    }
+
+    /* Section label above group */
+    .list-section-title {
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        padding: 0 4px 8px;
+    }
+
+    /* ════════════════════════════════════
+       List row
+    ════════════════════════════════════ */
+    .list-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 16px;
+        min-height: 52px;
+        background: transparent;
+        border: none;
+        width: 100%;
+        text-align: left;
+        color: var(--text-primary);
+        font-family: inherit;
+        cursor: pointer;
+        transition: background 0.14s ease;
+        text-decoration: none;
+        position: relative;
+    }
+
+    .list-row:hover  { background: var(--bg-hover); }
+    .list-row:active { background: rgba(255,255,255,0.06); }
+
+    /* Divider between rows */
+    .list-row + .list-row::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 56px; right: 0;
+        height: 1px;
+        background: var(--border-color);
+        opacity: 0.6;
+    }
+
+    /* When no icon — divider starts from left edge */
+    .list-row--no-icon + .list-row--no-icon::before { left: 16px; }
+
+    /* ── Icon cell ── */
+    .list-row__icon {
+        width: 32px; height: 32px;
+        border-radius: 9px;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        background: rgba(68,70,225,0.14);
+        color: #818cf8;
+    }
+
+    /* Icon color variants */
+    .list-row__icon--red    { background: rgba(230,53,48,0.14);   color: #f87171; }
+    .list-row__icon--green  { background: rgba(23,201,100,0.14);  color: #4ade80; }
+    .list-row__icon--yellow { background: rgba(245,165,36,0.14);  color: #fbbf24; }
+    .list-row__icon--teal   { background: rgba(20,184,166,0.14);  color: #2dd4bf; }
+    .list-row__icon--purple { background: rgba(139,92,246,0.14);  color: #c4b5fd; }
+    .list-row__icon--gray   { background: var(--bg-secondary);    color: var(--text-muted); }
+
+    /* ── Main content ── */
+    .list-row__body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .list-row__label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .list-row__sub {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ── Right side ── */
+    .list-row__right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .list-row__value {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+
+    /* Chevron */
+    .list-row__chevron {
+        color: var(--text-muted);
+        opacity: 0.5;
+        flex-shrink: 0;
+    }
+
+    /* Danger row */
+    .list-row--danger .list-row__label { color: #f87171; }
+    .list-row--danger .list-row__icon  { background: rgba(230,53,48,0.14); color: #f87171; }
+
+    /* ── Avatar in row ── */
+    .list-row__avatar {
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, var(--accent), #e63530);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 0.8rem; color: white;
+    }
+    .list-row__avatar img { width: 100%; height: 100%; object-fit: cover; }
+</style>
+
+
+<!-- ── 1. Settings-style list ── -->
+<div>
+    <div class="list-section-title">Аккаунт</div>
+    <div class="list-group">
+        <button class="list-row">
+            <div class="list-row__icon">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="list-row__body">
+                <div class="list-row__label">Профиль</div>
+                <div class="list-row__sub">Иванов Иван Иванович</div>
+            </div>
+            <div class="list-row__right">
+                <svg class="list-row__chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+        </button>
+        <button class="list-row">
+            <div class="list-row__icon list-row__icon--teal">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div class="list-row__body">
+                <div class="list-row__label">Безопасность</div>
+                <div class="list-row__sub">PIN, биометрия</div>
+            </div>
+            <div class="list-row__right">
+                <svg class="list-row__chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+        </button>
+        <button class="list-row">
+            <div class="list-row__icon list-row__icon--yellow">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </div>
+            <div class="list-row__body">
+                <div class="list-row__label">Уведомления</div>
+            </div>
+            <div class="list-row__right">
+                <span class="badge badge--accent badge--sm">3</span>
+                <svg class="list-row__chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+        </button>
+    </div>
+</div>
+
+
+<!-- ── 2. List with switch ── -->
+<div>
+    <div class="list-section-title">Настройки</div>
+    <div class="list-group">
+        <div class="list-row list-row--no-icon" style="cursor:default;">
+            <div class="list-row__body">
+                <div class="list-row__label">Тёмная тема</div>
+            </div>
+            <div class="list-row__right">
+                <label class="switch switch--sm">
+                    <input class="switch__input" type="checkbox" checked>
+                    <span class="switch__track"></span>
+                </label>
+            </div>
+        </div>
+        <div class="list-row list-row--no-icon" style="cursor:default;">
+            <div class="list-row__body">
+                <div class="list-row__label">Push-уведомления</div>
+                <div class="list-row__sub">Мероприятия и расписание</div>
+            </div>
+            <div class="list-row__right">
+                <label class="switch switch--sm switch--green">
+                    <input class="switch__input" type="checkbox" checked>
+                    <span class="switch__track"></span>
+                </label>
+            </div>
+        </div>
+        <div class="list-row list-row--no-icon" style="cursor:default;">
+            <div class="list-row__body">
+                <div class="list-row__label">Звук</div>
+            </div>
+            <div class="list-row__right">
+                <label class="switch switch--sm">
+                    <input class="switch__input" type="checkbox">
+                    <span class="switch__track"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ── 3. List with value / detail ── -->
+<div>
+    <div class="list-section-title">О приложении</div>
+    <div class="list-group">
+        <div class="list-row list-row--no-icon" style="cursor:default;">
+            <div class="list-row__body"><div class="list-row__label">Версия</div></div>
+            <div class="list-row__right"><span class="list-row__value">2.4.1</span></div>
+        </div>
+        <div class="list-row list-row--no-icon" style="cursor:default;">
+            <div class="list-row__body"><div class="list-row__label">Корпус</div></div>
+            <div class="list-row__right"><span class="list-row__value">Модерн</span></div>
+        </div>
+        <button class="list-row list-row--no-icon">
+            <div class="list-row__body"><div class="list-row__label">Политика конфиденциальности</div></div>
+            <div class="list-row__right">
+                <svg class="list-row__chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+        </button>
+    </div>
+</div>
+
+
+<!-- ── 4. People list ── -->
+<div>
+    <div class="list-section-title">Учителя</div>
+    <div class="list-group">
+        <button class="list-row">
+            <div class="list-row__avatar"><img src="/static/default_avatar.png" alt="u1"></div>
+            <div class="list-row__body">
+                <div class="list-row__label">Иванов Иван Иванович</div>
+                <div class="list-row__sub">Математика · Модерн</div>
+            </div>
+            <div class="list-row__right">
+                <span class="badge badge--dot badge--success"></span>
+                <svg class="list-row__chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+        </button>
+        <button class="list-row">
+            <div class="list-row__avatar" style="background:linear-gradient(135deg,#17c964,#0891b2);">МП</div>
+            <div class="list-row__body">
+                <div class="list-row__label">Петрова Мария Ивановна</div>
+                <div class="list-row__sub">Физика · Лицей</div>
+            </div>
+            <div class="list-row__right">
+                <span class="badge badge--dot badge--warning"></span>
+                <svg class="list-row__chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+        </button>
+        <button class="list-row">
+            <div class="list-row__avatar" style="background:linear-gradient(135deg,#8b5cf6,#4446E1);">СВ</div>
+            <div class="list-row__body">
+                <div class="list-row__label">Сидоров Виктор Павлович</div>
+                <div class="list-row__sub">Химия · Основной</div>
+            </div>
+            <div class="list-row__right">
+                <svg class="list-row__chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+        </button>
+    </div>
+</div>
+
+
+<!-- ── 5. Danger row (delete / logout) ── -->
+<div class="list-group">
+    <button class="list-row list-row--danger">
+        <div class="list-row__icon list-row__icon--red">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </div>
+        <div class="list-row__body">
+            <div class="list-row__label">Выйти из аккаунта</div>
+        </div>
+    </button>
+</div>

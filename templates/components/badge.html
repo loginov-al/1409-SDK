@@ -1,80 +1,207 @@
 <!-- =====================================================
-     1409 SDK — Badge & Chip Snippets
+     1409 SDK — Badge / Chip / Tag Snippets
      ===================================================== -->
+<style>
+    /* ════════════════════════════════════
+       Badge — маленький счётчик / статус
+    ════════════════════════════════════ */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 6px;
+        border-radius: var(--radius-full);
+        font-size: 0.68rem;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
 
-<!-- ── 1. BADGES ────────────────────────────────────── -->
-<div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-    <span class="badge badge-primary">Активен</span>
-    <span class="badge badge-success">Подтверждён</span>
-    <span class="badge badge-warning">Ожидание</span>
-    <span class="badge badge-danger">Отклонён</span>
-    <span class="badge badge-neutral">Архив</span>
-    <span class="badge badge-glass">
-        <span class="status-dot status-dot--online"></span>
-        Онлайн
-    </span>
+    .badge--dot {
+        width: 8px; height: 8px;
+        min-width: 8px; padding: 0;
+        border-radius: 50%;
+    }
+
+    .badge--sm { min-width: 16px; height: 16px; font-size: 0.6rem;  padding: 0 4px; }
+    .badge--lg { min-width: 24px; height: 24px; font-size: 0.76rem; padding: 0 8px; }
+
+    .badge--accent  { background: var(--accent); color: #fff; }
+    .badge--success { background: #17c964; color: #fff; }
+    .badge--warning { background: #f5a524; color: #fff; }
+    .badge--danger  { background: #e63530; color: #fff; }
+    .badge--neutral { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
+    .badge--info    { background: rgba(68,70,225,0.18); color: #a5b4fc; }
+
+    /* На иконке */
+    .badge-wrap {
+        position: relative;
+        display: inline-flex;
+        flex-shrink: 0;
+    }
+    .badge-wrap .badge {
+        position: absolute;
+        top: -5px; right: -7px;
+        z-index: 1;
+        box-shadow: 0 0 0 2px var(--bg-primary);
+    }
+    .badge-wrap .badge--dot { top: -1px; right: -1px; }
+
+    /* ════════════════════════════════════
+       Chip — интерактивный тег / фильтр
+    ════════════════════════════════════ */
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 32px;
+        padding: 0 12px;
+        border-radius: var(--radius-full);
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.18s cubic-bezier(0.34, 1.4, 0.64, 1);
+        user-select: none;
+        white-space: nowrap;
+        font-family: inherit;
+    }
+    .chip:hover  { background: var(--bg-hover); border-color: rgba(255,255,255,0.18); color: var(--text-primary); }
+    .chip.active { background: rgba(68,70,225,0.15); border-color: rgba(68,70,225,0.4); color: #c7d2fe; }
+    .chip:focus  { outline: none; }
+
+    .chip--sm { height: 26px; padding: 0 10px; font-size: 0.74rem; gap: 4px; }
+    .chip--lg { height: 38px; padding: 0 16px; font-size: 0.86rem; gap: 8px; }
+
+    .chip__remove {
+        display: flex; align-items: center; justify-content: center;
+        width: 16px; height: 16px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+        margin-right: -4px;
+        transition: background 0.15s;
+        flex-shrink: 0;
+    }
+    .chip__remove:hover { background: rgba(255,255,255,0.2); }
+
+    .chip--success { background: rgba(23,201,100,0.1);  border-color: rgba(23,201,100,0.25); color: #4ade80; }
+    .chip--warning { background: rgba(245,165,36,0.1);  border-color: rgba(245,165,36,0.25); color: #fbbf24; }
+    .chip--danger  { background: rgba(230,53,48,0.1);   border-color: rgba(230,53,48,0.25);  color: #f87171; }
+    .chip--accent  { background: rgba(68,70,225,0.12);  border-color: rgba(68,70,225,0.3);   color: #a5b4fc; }
+
+    .badge-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+</style>
+
+
+<!-- ── 1. Badge sizes & colors ── -->
+<div class="badge-row" style="align-items:center;">
+    <span class="badge badge--accent">3</span>
+    <span class="badge badge--accent">12</span>
+    <span class="badge badge--accent badge--sm">5</span>
+    <span class="badge badge--accent badge--lg">99+</span>
+    <span class="badge badge--success">Новый</span>
+    <span class="badge badge--warning">Ожидание</span>
+    <span class="badge badge--danger">!</span>
+    <span class="badge badge--neutral">Черновик</span>
+    <span class="badge badge--info">Бета</span>
+    <span class="badge badge--dot badge--accent"></span>
+    <span class="badge badge--dot badge--success"></span>
+    <span class="badge badge--dot badge--danger"></span>
 </div>
 
 
-<!-- ── 2. STATUS DOTS ────────────────────────────────── -->
-<div style="display:flex; gap:16px; align-items:center;">
-    <span class="status-dot status-dot--online"></span>
-    <span class="status-dot status-dot--away"></span>
-    <span class="status-dot status-dot--offline"></span>
-    <span class="status-dot status-dot--error"></span>
+<!-- ── 2. Badge on icons ── -->
+<div class="badge-row">
+    <div class="badge-wrap">
+        <button class="btn btn-glass btn--icon">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+        <span class="badge badge--danger">4</span>
+    </div>
+    <div class="badge-wrap">
+        <button class="btn btn-glass btn--icon">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <span class="badge badge--accent">7</span>
+    </div>
+    <div class="badge-wrap">
+        <button class="btn btn-glass btn--icon">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </button>
+        <span class="badge badge--dot badge--danger"></span>
+    </div>
 </div>
 
 
-<!-- ── 3. CHIPS ──────────────────────────────────────── -->
-<div class="tag-list">
-    <button class="chip active">
-        <i data-lucide="users" style="width:16px;height:16px;"></i> Учителя
+<!-- ── 3. Chips — filter row ── -->
+<div class="badge-row" style="flex-wrap:nowrap; overflow-x:auto; padding-bottom:2px;">
+    <button class="chip active">Все</button>
+    <button class="chip">Математика</button>
+    <button class="chip">Физика</button>
+    <button class="chip">Химия</button>
+    <button class="chip">История</button>
+    <button class="chip">Литература</button>
+    <button class="chip">Английский</button>
+</div>
+
+
+<!-- ── 4. Chips with icons ── -->
+<div class="badge-row">
+    <button class="chip chip--success">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Выполнено
     </button>
-    <button class="chip">
-        <i data-lucide="user" style="width:16px;height:16px;"></i> Ученики
+    <button class="chip chip--warning">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        В процессе
     </button>
-    <button class="chip">
-        <i data-lucide="building" style="width:16px;height:16px;"></i> Модерн
+    <button class="chip chip--danger">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        Просрочено
+    </button>
+    <button class="chip chip--accent">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Избранное
     </button>
 </div>
 
 
-<!-- ── 4. SCORE PLAQUE ───────────────────────────────── -->
-<div class="score-plaque">
-    <i data-lucide="star" style="width:16px;height:16px;"></i>
-    128 баллов
+<!-- ── 5. Removable chips ── -->
+<div class="badge-row" id="chipGroup">
+    <button class="chip" onclick="removeChip(this)">
+        Модерн
+        <span class="chip__remove">
+            <svg width="8" height="8" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </span>
+    </button>
+    <button class="chip" onclick="removeChip(this)">
+        Лицей
+        <span class="chip__remove">
+            <svg width="8" height="8" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </span>
+    </button>
+    <button class="chip" onclick="removeChip(this)">
+        9–11 классы
+        <span class="chip__remove">
+            <svg width="8" height="8" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </span>
+    </button>
 </div>
 
-
-<!-- ── 5. PROGRESS PLAQUE (кнопка с прогрессом) ─────── -->
-<div class="progress-plaque">
-    <div class="progress-plaque__fill" id="progressFill" style="width: 60%;"></div>
-    <span class="progress-plaque__label">Показать охране</span>
-</div>
-
-
-<!-- ── 6. ICON WITH NOTIFICATION BADGE ───────────────── -->
-<div style="position:relative; display:inline-flex;">
-    <i data-lucide="bell" style="width:28px; height:28px;"></i>
-    <span class="notif-badge">3</span>
-</div>
-
-
-<!-- ── 7. MENU ICON CHIPS ─────────────────────────────── -->
-<div style="display:flex; flex-wrap:wrap; gap:12px;">
-    <div class="chip">
-        <img src="/static/menu/events-minimalistic-icon.png" alt="events"> Мероприятия
-    </div>
-    <div class="chip">
-        <img src="/static/menu/guests-minimalistic-icon.png" alt="guests"> Гости
-    </div>
-    <div class="chip">
-        <img src="/static/menu/elevator-minimalistic-icon.png" alt="lift"> Лифт
-    </div>
-    <div class="chip">
-        <img src="/static/menu/accounts-minimalistic-icon.png" alt="accounts"> Аккаунты
-    </div>
-    <div class="chip">
-        <img src="/static/menu/tech-support-minimalistic-icon.png" alt="support"> Поддержка
-    </div>
-</div>
+<script>
+function removeChip(btn) {
+    btn.style.transition = 'opacity .2s, transform .2s';
+    btn.style.opacity = '0';
+    btn.style.transform = 'scale(0.85)';
+    setTimeout(() => btn.remove(), 200);
+}
+document.querySelectorAll('.chip:not([onclick])').forEach(chip => {
+    chip.addEventListener('click', () => chip.classList.toggle('active'));
+});
+</script>
