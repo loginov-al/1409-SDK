@@ -1,0 +1,239 @@
+<!-- =====================================================
+     1409 SDK — Fullscreen QR Code Display
+     ===================================================== -->
+<style>
+    /* ── QR trigger card ── */
+    .qr-trigger-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .qr-trigger-card:hover {
+        border-color: rgba(68,70,225,0.35);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    }
+
+    .qr-trigger-preview {
+        width: 120px; height: 120px;
+        background: white;
+        border-radius: 16px;
+        padding: 12px;
+        position: relative;
+        display: flex; align-items: center; justify-content: center;
+    }
+
+    /* QR pattern placeholder */
+    .qr-pattern {
+        width: 100%; height: 100%;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        grid-template-rows: repeat(7, 1fr);
+        gap: 1.5px;
+    }
+
+    .qr-cell { background: #111; border-radius: 1px; }
+    .qr-cell--w { background: transparent; }
+
+    /* Logo overlay on QR */
+    .qr-logo-overlay {
+        position: absolute;
+        width: 28px; height: 28px;
+        background: white;
+        border-radius: 6px;
+        padding: 3px;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 0 0 2px white;
+    }
+
+    .qr-trigger-name { font-size: 0.95rem; font-weight: 700; }
+    .qr-trigger-sub  { font-size: 0.78rem; color: var(--text-muted); }
+
+    .qr-trigger-btn {
+        display: flex; align-items: center; gap: 6px;
+        background: var(--accent);
+        color: white; border: none; border-radius: var(--radius-md);
+        padding: 10px 20px; font-size: 0.85rem; font-weight: 700;
+        cursor: pointer; font-family: inherit;
+        transition: all 0.2s;
+    }
+    .qr-trigger-btn:hover { opacity: 0.88; }
+
+    /* ── Fullscreen overlay ── */
+    .qr-overlay {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 28px;
+        z-index: 2000;
+        visibility: hidden; opacity: 0;
+        transition: all 0.3s ease;
+    }
+    .qr-overlay.shown { visibility: visible; opacity: 1; }
+
+    .qr-overlay__close {
+        position: absolute; top: 20px; right: 20px;
+        width: 42px; height: 42px;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 50%; color: white;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; font-size: 1.4rem; line-height: 1;
+        transition: background 0.2s;
+    }
+    .qr-overlay__close:hover { background: rgba(255,255,255,0.18); }
+
+    .qr-overlay__label {
+        font-size: 0.7rem; font-weight: 800; letter-spacing: 3px;
+        text-transform: uppercase; color: rgba(255,255,255,0.3);
+    }
+
+    /* Large QR */
+    .qr-large {
+        width: 220px; height: 220px;
+        background: white;
+        border-radius: 24px;
+        padding: 20px;
+        position: relative;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 0 60px rgba(68,70,225,0.25), 0 20px 60px rgba(0,0,0,0.4);
+        animation: qrPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes qrPulse {
+        0%,100% { box-shadow: 0 0 40px rgba(68,70,225,0.2), 0 20px 60px rgba(0,0,0,0.4); }
+        50%      { box-shadow: 0 0 80px rgba(68,70,225,0.45), 0 20px 60px rgba(0,0,0,0.4); }
+    }
+
+    .qr-large .qr-pattern { gap: 2.5px; }
+
+    .qr-large .qr-logo-overlay {
+        width: 52px; height: 52px;
+        border-radius: 12px; padding: 5px;
+        box-shadow: 0 0 0 4px white;
+    }
+
+    .qr-overlay__info {
+        text-align: center;
+        display: flex; flex-direction: column; gap: 4px;
+    }
+    .qr-overlay__name  { font-size: 1.2rem; font-weight: 800; color: white; }
+    .qr-overlay__class { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
+
+    .qr-overlay__valid {
+        display: flex; align-items: center; gap: 6px;
+        font-size: 0.72rem; font-weight: 700;
+        color: #17c964;
+        background: rgba(23,201,100,0.1);
+        border: 1px solid rgba(23,201,100,0.2);
+        padding: 6px 14px; border-radius: 999px;
+    }
+    .qr-overlay__valid-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #17c964;
+        box-shadow: 0 0 6px #17c964;
+        animation: validPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes validPulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+</style>
+
+
+<!-- ── Trigger card ── -->
+<div class="qr-trigger-card" onclick="openQr()">
+    <div class="qr-trigger-preview">
+        <div class="qr-pattern" id="qrSmall"></div>
+        <div class="qr-logo-overlay">
+            <img src="/static/favicon.png" alt="1409" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+    </div>
+    <div class="qr-trigger-name">Иванов Иван Иванович</div>
+    <div class="qr-trigger-sub">10А · Модерн · ID #1042</div>
+    <button class="qr-trigger-btn">
+        <i data-lucide="maximize-2" style="width:14px;height:14px;"></i>
+        Показать QR
+    </button>
+</div>
+
+
+<!-- ── Fullscreen QR overlay ── -->
+<div class="qr-overlay" id="qrOverlay">
+    <button class="qr-overlay__close" onclick="closeQr()">×</button>
+
+    <div class="qr-overlay__label">Пропуск · Портал 1409</div>
+
+    <div class="qr-large">
+        <div class="qr-pattern" id="qrLarge"></div>
+        <div class="qr-logo-overlay">
+            <img src="/static/favicon.png" alt="1409" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+    </div>
+
+    <div class="qr-overlay__info">
+        <div class="qr-overlay__name">Иванов Иван Иванович</div>
+        <div class="qr-overlay__class">10А · Модерн · Учитель: Петрова М.И.</div>
+    </div>
+
+    <div class="qr-overlay__valid">
+        <div class="qr-overlay__valid-dot"></div>
+        Действителен сегодня
+    </div>
+</div>
+
+
+<script>
+(function() {
+    /* Build pixel QR placeholder pattern */
+    const PAT = [
+        1,1,1,1,1,1,1,
+        1,0,0,0,0,0,1,
+        1,0,1,1,1,0,1,
+        1,0,1,0,1,0,1,
+        1,0,1,1,1,0,1,
+        1,0,0,0,0,0,1,
+        1,1,1,1,1,1,1,
+    ];
+
+    function buildQr(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = '';
+        /* finder patterns + random data cells */
+        for (let r = 0; r < 7; r++) {
+            for (let c = 0; c < 7; c++) {
+                const cell = document.createElement('div');
+                /* top-left finder */
+                let filled = PAT[r * 7 + c];
+                /* add some pseudo-random data dots */
+                if (!filled) {
+                    const hash = (r * 13 + c * 7 + r * c) % 3;
+                    filled = hash === 0 ? 1 : 0;
+                }
+                cell.className = 'qr-cell' + (filled ? '' : ' qr-cell--w');
+                el.appendChild(cell);
+            }
+        }
+    }
+
+    buildQr('qrSmall');
+    buildQr('qrLarge');
+
+    window.openQr  = () => document.getElementById('qrOverlay').classList.add('shown');
+    window.closeQr = () => document.getElementById('qrOverlay').classList.remove('shown');
+
+    document.getElementById('qrOverlay').addEventListener('click', e => {
+        if (e.target === document.getElementById('qrOverlay')) closeQr();
+    });
+})();
+</script>

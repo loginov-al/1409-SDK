@@ -1,0 +1,231 @@
+<!-- =====================================================
+     1409 SDK — iOS-style PIN Input
+     ===================================================== -->
+<style>
+    .pin-wrap {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        padding: 32px 24px 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .pin-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .pin-avatar {
+        width: 64px; height: 64px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid rgba(255,255,255,0.15);
+        flex-shrink: 0;
+    }
+    .pin-avatar img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .pin-name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .pin-sub {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+    }
+
+    /* ── Dots ── */
+    .pin-dots {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        height: 22px;
+    }
+
+    .pin-dot {
+        width: 14px; height: 14px;
+        border-radius: 50%;
+        border: 2px solid var(--border-light);
+        background: transparent;
+        transition: all 0.18s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .pin-dot.filled {
+        background: var(--text-primary);
+        border-color: var(--text-primary);
+        transform: scale(1.15);
+    }
+
+    .pin-dot.error {
+        background: #ef4444;
+        border-color: #ef4444;
+        animation: pinShake 0.4s ease;
+    }
+
+    @keyframes pinShake {
+        0%,100% { transform: translateX(0) scale(1); }
+        20%      { transform: translateX(-6px) scale(1.1); }
+        40%      { transform: translateX(6px) scale(1.1); }
+        60%      { transform: translateX(-4px); }
+        80%      { transform: translateX(4px); }
+    }
+
+    /* ── Keypad ── */
+    .pin-pad {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        width: 100%;
+    }
+
+    .pin-key {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 64px;
+        border-radius: var(--radius-md);
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        transition: all 0.12s ease;
+        font-family: inherit;
+        color: var(--text-primary);
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+
+    .pin-key:hover { background: var(--bg-hover); }
+    .pin-key:active { transform: scale(0.92); background: var(--bg-hover); }
+
+    .pin-key__num {
+        font-size: 1.3rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .pin-key__letters {
+        font-size: 0.55rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        color: var(--text-muted);
+        margin-top: 2px;
+        text-transform: uppercase;
+    }
+
+    .pin-key--empty { background: transparent; border-color: transparent; cursor: default; }
+    .pin-key--empty:hover { background: transparent; }
+    .pin-key--empty:active { transform: none; }
+
+    .pin-key--delete {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+    }
+
+    /* Biometrics key */
+    .pin-key--bio { color: var(--text-secondary); }
+
+    /* ── Forgot link ── */
+    .pin-forgot {
+        font-size: 0.8rem;
+        color: var(--accent);
+        font-weight: 600;
+        background: none; border: none;
+        cursor: pointer; font-family: inherit;
+        padding: 0;
+    }
+</style>
+
+<div class="pin-wrap">
+    <div class="pin-header">
+        <div class="pin-avatar">
+            <img src="/static/default_avatar.png" alt="avatar">
+        </div>
+        <div class="pin-name">Иванов Иван</div>
+        <div class="pin-sub">Введите PIN-код</div>
+    </div>
+
+    <div class="pin-dots" id="pinDots">
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+    </div>
+
+    <div class="pin-pad">
+        <button class="pin-key" onclick="pinInput('1')"><span class="pin-key__num">1</span><span class="pin-key__letters"></span></button>
+        <button class="pin-key" onclick="pinInput('2')"><span class="pin-key__num">2</span><span class="pin-key__letters">ABC</span></button>
+        <button class="pin-key" onclick="pinInput('3')"><span class="pin-key__num">3</span><span class="pin-key__letters">DEF</span></button>
+        <button class="pin-key" onclick="pinInput('4')"><span class="pin-key__num">4</span><span class="pin-key__letters">GHI</span></button>
+        <button class="pin-key" onclick="pinInput('5')"><span class="pin-key__num">5</span><span class="pin-key__letters">JKL</span></button>
+        <button class="pin-key" onclick="pinInput('6')"><span class="pin-key__num">6</span><span class="pin-key__letters">MNO</span></button>
+        <button class="pin-key" onclick="pinInput('7')"><span class="pin-key__num">7</span><span class="pin-key__letters">PQRS</span></button>
+        <button class="pin-key" onclick="pinInput('8')"><span class="pin-key__num">8</span><span class="pin-key__letters">TUV</span></button>
+        <button class="pin-key" onclick="pinInput('9')"><span class="pin-key__num">9</span><span class="pin-key__letters">WXYZ</span></button>
+        <button class="pin-key pin-key--bio" onclick="pinBio()">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9v3.5c0 .93-.4 1.77-1.04 2.36"/><path d="M9 9c0-1.66 1.34-3 3-3s3 1.34 3 3v5"/><path d="M7.5 14.5V9a4.5 4.5 0 0 1 9 0v4"/><path d="M12 17v5"/><path d="M15 17c0 1.1-.9 2-2 2"/></svg>
+        </button>
+        <button class="pin-key" onclick="pinInput('0')"><span class="pin-key__num">0</span><span class="pin-key__letters"></span></button>
+        <button class="pin-key pin-key--delete" onclick="pinDelete()">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+        </button>
+    </div>
+
+    <button class="pin-forgot">Забыли PIN?</button>
+</div>
+
+<script>
+(function() {
+    const CORRECT = '1409';
+    let entered = '';
+    const dots = Array.from(document.querySelectorAll('#pinDots .pin-dot'));
+
+    function render() {
+        dots.forEach((d, i) => {
+            d.classList.toggle('filled', i < entered.length);
+            d.classList.remove('error');
+        });
+    }
+
+    window.pinInput = function(d) {
+        if (entered.length >= 4) return;
+        entered += d;
+        render();
+        if (entered.length === 4) {
+            setTimeout(() => {
+                if (entered === CORRECT) {
+                    dots.forEach(d => { d.style.background='#22c55e'; d.style.borderColor='#22c55e'; });
+                    document.querySelector('.pin-sub').textContent = '✓ Добро пожаловать!';
+                } else {
+                    dots.forEach(d => d.classList.add('error'));
+                    setTimeout(() => { entered = ''; render(); }, 500);
+                }
+            }, 120);
+        }
+    };
+
+    window.pinDelete = function() {
+        entered = entered.slice(0, -1);
+        render();
+    };
+
+    window.pinBio = function() {
+        document.querySelector('.pin-sub').textContent = 'Face ID...';
+        setTimeout(() => { document.querySelector('.pin-sub').textContent = 'Введите PIN-код'; }, 1500);
+    };
+})();
+</script>

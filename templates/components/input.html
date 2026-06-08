@@ -1,0 +1,105 @@
+<!-- =====================================================
+     1409 SDK — Form Input Snippets
+     ===================================================== -->
+<div style="display:flex; flex-direction:column; gap:20px;">
+
+<!-- ── 1. Default text ── -->
+<div class="form-group">
+    <label class="form-label form-label--required">Полное имя</label>
+    <input class="form-input" type="text" placeholder="Иванов Иван Иванович">
+</div>
+
+
+<!-- ── 2. With icon ── -->
+<div class="form-group">
+    <label class="form-label">Email</label>
+    <div class="form-input-wrap">
+        <i data-lucide="mail" class="form-input-icon"></i>
+        <input class="form-input" type="email" placeholder="ivan@school.ru">
+    </div>
+</div>
+
+
+<!-- ── 3. Password with toggle ── -->
+<div class="form-group">
+    <label class="form-label">Пароль</label>
+    <div class="form-input-wrap" style="position:relative;">
+        <i data-lucide="lock" class="form-input-icon"></i>
+        <input class="form-input" type="password" id="pwInput" placeholder="••••••••">
+        <button onclick="togglePw()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;padding:4px;display:flex;align-items:center;" tabindex="-1">
+            <i data-lucide="eye" id="pwIcon" style="width:16px;height:16px;"></i>
+        </button>
+    </div>
+    <span class="form-hint">Минимум 8 символов</span>
+</div>
+
+
+<!-- ── 4. Select ── -->
+<div class="form-group">
+    <label class="form-label">Корпус</label>
+    <select class="form-input form-select">
+        <option value="">Выберите корпус...</option>
+        <option>Модерн</option>
+        <option>Лицей</option>
+        <option>Основной</option>
+    </select>
+</div>
+
+
+<!-- ── 5. Textarea ── -->
+<div class="form-group">
+    <label class="form-label">Примечание</label>
+    <textarea class="form-input form-textarea" placeholder="Введите дополнительный текст..."></textarea>
+    <span class="form-hint">
+        <i data-lucide="info" style="width:12px;height:12px;"></i>
+        Максимум 500 символов
+    </span>
+</div>
+
+
+<!-- ── 6. Error state ── -->
+<div class="form-group">
+    <label class="form-label">Телефон</label>
+    <div class="form-input-wrap">
+        <i data-lucide="phone" class="form-input-icon"></i>
+        <input class="form-input form-input--error" type="tel" value="+7 abc def">
+    </div>
+    <span class="form-error-msg">
+        <i data-lucide="alert-circle" style="width:13px;height:13px;"></i>
+        Введите корректный номер телефона
+    </span>
+</div>
+
+
+<!-- ── 7. Success state ── -->
+<div class="form-group">
+    <label class="form-label">Email</label>
+    <div class="form-input-wrap">
+        <i data-lucide="mail" class="form-input-icon"></i>
+        <input class="form-input form-input--success" type="email" value="ivan@school.ru">
+    </div>
+    <span class="form-success-msg">
+        <i data-lucide="check-circle" style="width:13px;height:13px;"></i>
+        Email подтверждён
+    </span>
+</div>
+
+
+<!-- ── 8. Disabled ── -->
+<div class="form-group">
+    <label class="form-label">Логин (недоступно)</label>
+    <input class="form-input" type="text" value="ivan.ivanov" disabled>
+</div>
+
+</div>
+
+<script>
+function togglePw() {
+    const inp  = document.getElementById('pwInput');
+    const icon = document.getElementById('pwIcon');
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    icon.setAttribute('data-lucide', show ? 'eye-off' : 'eye');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+</script>

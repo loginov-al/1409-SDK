@@ -1,0 +1,140 @@
+<!-- =====================================================
+     1409 SDK — App Header / Top Bar Snippets
+     ===================================================== -->
+<style>
+    .app-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 16px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+    }
+
+    .app-header__back {
+        width: 38px; height: 38px;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: background var(--transition-base);
+        flex-shrink: 0;
+        text-decoration: none;
+    }
+    .app-header__back:hover { background: var(--bg-hover); }
+
+    .app-header__center {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .app-header__title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .app-header__sub {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    .app-header__action {
+        width: 38px; height: 38px;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: background var(--transition-base);
+        flex-shrink: 0;
+    }
+    .app-header__action:hover { background: var(--bg-hover); }
+    .app-header__action--accent {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+    }
+    .app-header__action--accent:hover { opacity: 0.85; background: var(--accent); }
+
+    /* Search bar variant */
+    .app-header__search {
+        flex: 1;
+        display: flex; align-items: center; gap: 8px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        padding: 8px 12px;
+        color: var(--text-muted);
+        font-size: 0.88rem;
+        transition: border-color var(--transition-base);
+    }
+    .app-header__search:focus-within {
+        border-color: var(--accent);
+    }
+    .app-header__search input {
+        background: none; border: none; outline: none;
+        color: var(--text-primary); font-size: 0.88rem; width: 100%;
+        font-family: inherit;
+    }
+    .app-header__search input::placeholder { color: var(--text-muted); }
+</style>
+
+
+<!-- ── 1. Standard (back + title + action) ── -->
+<div class="app-header">
+    <button class="app-header__back">
+        <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+    </button>
+    <div class="app-header__center">
+        <div class="app-header__title">Профиль</div>
+        <div class="app-header__sub">Иванов Иван · 10А</div>
+    </div>
+    <button class="app-header__action">
+        <i data-lucide="more-horizontal" style="width:18px;height:18px;"></i>
+    </button>
+</div>
+
+
+<!-- ── 2. Title only (no back) ── -->
+<div class="app-header">
+    <div class="app-header__center" style="align-items:flex-start;">
+        <div class="app-header__title">Мероприятия</div>
+        <div class="app-header__sub">Портал 1409</div>
+    </div>
+    <button class="app-header__action app-header__action--accent">
+        <i data-lucide="plus" style="width:18px;height:18px;"></i>
+    </button>
+    <button class="app-header__action">
+        <i data-lucide="bell" style="width:18px;height:18px;"></i>
+    </button>
+</div>
+
+
+<!-- ── 3. With search bar ── -->
+<div class="app-header">
+    <button class="app-header__back">
+        <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+    </button>
+    <div class="app-header__search">
+        <i data-lucide="search" style="width:15px;height:15px;flex-shrink:0;"></i>
+        <input type="text" placeholder="Поиск учеников...">
+    </div>
+    <button class="app-header__action">
+        <i data-lucide="sliders-horizontal" style="width:18px;height:18px;"></i>
+    </button>
+</div>

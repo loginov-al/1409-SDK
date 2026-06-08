@@ -193,5 +193,80 @@
             wrap.prepend(bar);
         }
     });
+
+    /* ── Element Picker (injected by admin) ── */
+    (function() {
+        let active = false, hl = null;
+
+        function makeHl() {
+            const d = document.createElement('div');
+            d.style.cssText = 'position:fixed;pointer-events:none;background:rgba(99,102,241,0.1);outline:2px solid rgba(99,102,241,0.9);outline-offset:1px;border-radius:3px;z-index:99999;box-sizing:border-box;';
+            document.body.appendChild(d); return d;
+        }
+
+        function posHl(el) {
+            if (!hl || !el) return;
+            const r = el.getBoundingClientRect();
+            Object.assign(hl.style, { top:r.top+'px', left:r.left+'px', width:r.width+'px', height:r.height+'px' });
+        }
+
+        function getMatchingCss(el) {
+            const classes = Array.from(el.classList);
+            const tag = el.tagName.toLowerCase();
+            let out = '';
+            try {
+                for (const sheet of document.styleSheets) {
+                    try {
+                        for (const rule of sheet.cssRules || []) {
+                            if (!rule.selectorText) continue;
+                            if (classes.some(c => rule.selectorText.includes('.'+c)) || rule.selectorText === tag)
+                                out += rule.cssText + '\n\n';
+                        }
+                    } catch(e) {}
+                }
+            } catch(e) {}
+            return out.trim() || '/* Совпадений не найдено */';
+        }
+
+        window.addEventListener('message', e => {
+            if (!e.data) return;
+            if (e.data.type === 'enablePicker') {
+                active = true; hl = makeHl();
+                document.documentElement.style.cursor = 'crosshair';
+            }
+            if (e.data.type === 'disablePicker') {
+                active = false;
+                if (hl) { hl.remove(); hl = null; }
+                document.documentElement.style.cursor = '';
+            }
+        });
+
+        document.addEventListener('mouseover', e => { if (active) posHl(e.target); }, true);
+
+        document.addEventListener('click', e => {
+            if (!active) return;
+            e.preventDefault(); e.stopPropagation();
+            active = false;
+            if (hl) { hl.remove(); hl = null; }
+            document.documentElement.style.cursor = '';
+
+            const el = e.target;
+            const path = [];
+            let cur = el;
+            for (let i = 0; i < 4 && cur?.tagName; i++) {
+                const t = cur.tagName.toLowerCase();
+                const c = Array.from(cur.classList).slice(0,2).map(x=>'.'+x).join('');
+                path.unshift(t + c); cur = cur.parentElement;
+            }
+
+            window.parent.postMessage({
+                type: 'pickedElement',
+                html: el.outerHTML,
+                css:  getMatchingCss(el),
+                path: path.join(' > '),
+                tag:  el.tagName.toLowerCase(),
+            }, '*');
+        }, true);
+    })();
 </script>
 {% endblock %}

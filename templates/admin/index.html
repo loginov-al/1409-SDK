@@ -644,6 +644,75 @@
             box-shadow:0 8px 30px rgba(0,0,0,0.45);
         }
         #toast.shown { opacity:1; transform:translateX(-50%) translateY(0); }
+
+        /* ═══════════════════════════════════════
+           ELEMENT PICKER DRAWER
+        ═══════════════════════════════════════ */
+        .picker-btn.active {
+            color: var(--accent-text);
+            border-color: rgba(99,102,241,0.4);
+            background: var(--accent-dim);
+        }
+        .picker-btn.active svg { animation: crosshairSpin 2s linear infinite; }
+        @keyframes crosshairSpin { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+        #pickerDrawer {
+            position: fixed;
+            top: 0; right: -520px;
+            width: 480px; height: 100vh;
+            background: #0d0d12;
+            border-left: 1px solid rgba(255,255,255,0.07);
+            display: flex; flex-direction: column;
+            z-index: 950;
+            transition: right 0.32s cubic-bezier(0.22,1,0.36,1);
+            box-shadow: -24px 0 60px rgba(0,0,0,0.55);
+        }
+        #pickerDrawer.open { right: 0; }
+
+        .pd-header {
+            display: flex; align-items: center; gap: 10px;
+            padding: 13px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            flex-shrink: 0;
+            background: rgba(0,0,0,0.2);
+        }
+        .pd-title { font-size: 0.75rem; font-weight: 800; color: var(--accent-text); letter-spacing:.5px; flex-shrink:0; }
+        .pd-path  { font-size: 0.68rem; color: var(--t3); font-family: monospace; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .pd-close {
+            width:26px; height:26px; border-radius:7px;
+            background:var(--s2); border:1px solid var(--border);
+            color:var(--t2); display:flex; align-items:center; justify-content:center;
+            cursor:pointer; flex-shrink:0; font-size:1.1rem; line-height:1;
+        }
+        .pd-close:hover { color:var(--t1); background:var(--s3); }
+
+        .pd-tabs {
+            display:flex; align-items:center; gap:4px;
+            padding: 8px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
+        .pd-tab {
+            padding: 5px 14px; border-radius: 7px;
+            font-size: 0.72rem; font-weight: 700;
+            cursor: pointer; background:none; border:none;
+            color: var(--t2); transition: all .15s; font-family:inherit;
+        }
+        .pd-tab.active { background:var(--accent-dim); color:var(--accent-text); }
+        .pd-tab:hover:not(.active) { background:var(--s3); color:var(--t1); }
+        .pd-tabs-right { margin-left:auto; display:flex; gap:6px; }
+
+        .pd-body { flex:1; overflow:auto; }
+        .pd-body pre { margin:0!important; border-radius:0!important; background:transparent!important; min-height:100%; }
+        .pd-body code { font-size:0.77rem!important; line-height:1.65!important; padding:16px!important; }
+
+        .pd-empty {
+            flex:1; display:flex; flex-direction:column;
+            align-items:center; justify-content:center;
+            gap:14px; color:var(--t3); font-size:.82rem;
+            padding:40px; text-align:center;
+        }
+        .pd-empty svg { opacity:.25; }
     </style>
 </head>
 <body>
@@ -927,6 +996,10 @@
                 <button class="toolbar-btn" onclick="reloadPreview()" title="Обновить">
                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
                 </button>
+                <button class="toolbar-btn picker-btn" id="pickerBtn" onclick="togglePicker()" title="Выделить элемент">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+                    Выделить
+                </button>
                 <div class="preview-sep"></div>
                 <div class="preview-theme-group">
                     <button class="size-btn active" id="themeDark" onclick="setPreviewTheme('dark',this)">🌙 Dark</button>
@@ -1019,6 +1092,31 @@
 
 <!-- Toast -->
 <div id="toast"></div>
+
+<!-- Element Picker Drawer -->
+<div id="pickerDrawer">
+    <div class="pd-header">
+        <span class="pd-title">ЭЛЕМЕНТ</span>
+        <span class="pd-path" id="pdPath">—</span>
+        <button class="pd-close" onclick="closePickerDrawer()">×</button>
+    </div>
+    <div class="pd-tabs">
+        <button class="pd-tab active" id="pdTabHtml" onclick="setPickerTab('html')">HTML</button>
+        <button class="pd-tab" id="pdTabCss"  onclick="setPickerTab('css')">CSS</button>
+        <div class="pd-tabs-right">
+            <button class="toolbar-btn" id="pdCopyBtn" onclick="copyPickerContent()">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Копировать
+            </button>
+        </div>
+    </div>
+    <div class="pd-body" id="pdBody">
+        <div class="pd-empty">
+            <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+            Нажми <strong style="color:var(--t1)">Выделить</strong>, затем кликни<br>на любой элемент в превью
+        </div>
+    </div>
+</div>
 
 <script>
 // ─── STATE ───────────────────────────────────────────
@@ -1381,6 +1479,76 @@ document.querySelectorAll('.sb-item').forEach((item, i) => {
         item.style.transform = 'translateX(0)';
     }, 40 + i * 28);
 });
+
+// ─── ELEMENT PICKER ──────────────────────────────────
+let pickerMode = false;
+window._pickerData = null;
+
+function togglePicker() {
+    const frame = document.getElementById('previewFrame');
+    if (!frame.src || frame.src === 'about:blank') {
+        showToast('⚠️ Сначала загрузи превью'); return;
+    }
+    pickerMode = !pickerMode;
+    document.getElementById('pickerBtn').classList.toggle('active', pickerMode);
+    try { frame.contentWindow.postMessage({type: pickerMode ? 'enablePicker' : 'disablePicker'}, '*'); } catch {}
+    if (pickerMode) showToast('🎯 Кликни на элемент в превью');
+    else closePickerDrawer();
+}
+
+window.addEventListener('message', e => {
+    if (e.data?.type !== 'pickedElement') return;
+    pickerMode = false;
+    document.getElementById('pickerBtn').classList.remove('active');
+    window._pickerData = e.data;
+    document.getElementById('pickerDrawer').classList.add('open');
+    document.getElementById('pdPath').textContent = e.data.path || e.data.tag;
+    document.getElementById('pdTabHtml').classList.add('active');
+    document.getElementById('pdTabCss').classList.remove('active');
+    renderPickerContent('html');
+});
+
+function closePickerDrawer() {
+    document.getElementById('pickerDrawer').classList.remove('open');
+    if (pickerMode) {
+        pickerMode = false;
+        document.getElementById('pickerBtn').classList.remove('active');
+        try { document.getElementById('previewFrame').contentWindow.postMessage({type:'disablePicker'}, '*'); } catch {}
+    }
+}
+
+function setPickerTab(tab) {
+    document.querySelectorAll('.pd-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('pdTab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+    renderPickerContent(tab);
+}
+
+function renderPickerContent(tab) {
+    if (!window._pickerData) return;
+    const content = tab === 'html' ? window._pickerData.html : window._pickerData.css;
+    const lang    = tab === 'html' ? 'xml' : 'css';
+    const body    = document.getElementById('pdBody');
+    body.innerHTML = `<pre><code class="language-${lang}"></code></pre>`;
+    const codeEl  = body.querySelector('code');
+    codeEl.textContent = content || '';
+    if (window.hljs) hljs.highlightElement(codeEl);
+}
+
+function copyPickerContent() {
+    const tab = document.querySelector('.pd-tab.active')?.id === 'pdTabCss' ? 'css' : 'html';
+    const content = tab === 'html' ? window._pickerData?.html : window._pickerData?.css;
+    if (!content) return;
+    navigator.clipboard.writeText(content).then(() => {
+        const btn = document.getElementById('pdCopyBtn');
+        btn.classList.add('copied');
+        btn.innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Скопировано!`;
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Копировать`;
+        }, 2000);
+        showToast('📋 Скопировано');
+    });
+}
 
 // ─── INIT LUCIDE ─────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {

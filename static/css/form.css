@@ -1,0 +1,137 @@
+/* =====================================================
+   1409 SDK — Form Elements
+   ===================================================== */
+
+/* ---- Group (label + input) ---- */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.form-label--required::after {
+    content: ' *';
+    color: var(--accent);
+}
+
+/* ---- Base input ---- */
+.form-input {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    font-family: inherit;
+    transition: all var(--transition-base);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-input::placeholder { color: var(--text-muted); }
+
+.form-input:focus {
+    border-color: var(--accent);
+    background: var(--bg-hover);
+    box-shadow: 0 0 0 3px rgba(68, 70, 225, 0.12);
+}
+
+.form-input:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* ---- States ---- */
+.form-input--error { border-color: #ef4444; }
+.form-input--error:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+    border-color: #ef4444;
+}
+
+.form-input--success { border-color: #22c55e; }
+.form-input--success:focus {
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+    border-color: #22c55e;
+}
+
+/* ---- Input with leading icon ---- */
+.form-input-wrap {
+    position: relative;
+}
+
+.form-input-wrap .form-input {
+    padding-left: 44px;
+}
+
+.form-input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+    pointer-events: none;
+    transition: color var(--transition-base);
+}
+
+.form-input-wrap:focus-within .form-input-icon {
+    color: var(--accent);
+}
+
+/* ---- Textarea ---- */
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+/* ---- Select ---- */
+.form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2' stroke-linecap='round' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 42px;
+    cursor: pointer;
+}
+
+[data-theme="light"] .form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='rgba(0,0,0,0.4)' stroke-width='2' stroke-linecap='round' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
+/* ---- Feedback messages ---- */
+.form-hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.form-error-msg {
+    font-size: 0.78rem;
+    color: #ef4444;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.form-success-msg {
+    font-size: 0.78rem;
+    color: #22c55e;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}

@@ -1,0 +1,305 @@
+<!-- =====================================================
+     1409 SDK — Switch / Checkbox / Radio Snippets
+     ===================================================== -->
+<style>
+    /* ════════════════════════════════════
+       iOS-style Toggle Switch
+    ════════════════════════════════════ */
+    .switch {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        gap: 10px;
+        user-select: none;
+    }
+
+    .switch__input {
+        position: absolute;
+        opacity: 0;
+        width: 0; height: 0;
+    }
+
+    .switch__track {
+        width: 50px; height: 28px;
+        background: var(--bg-secondary);
+        border: 1.5px solid var(--border-color);
+        border-radius: 999px;
+        position: relative;
+        transition: all 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
+        flex-shrink: 0;
+    }
+
+    .switch__track::after {
+        content: '';
+        position: absolute;
+        top: 2px; left: 2px;
+        width: 20px; height: 20px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    .switch__input:checked + .switch__track {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(68,70,225,0.14);
+    }
+
+    .switch__input:checked + .switch__track::after {
+        transform: translateX(22px);
+    }
+
+    /* Sizes */
+    .switch--sm .switch__track         { width: 38px; height: 22px; }
+    .switch--sm .switch__track::after  { width: 15px; height: 15px; }
+    .switch--sm .switch__input:checked + .switch__track::after { transform: translateX(16px); }
+
+    .switch--lg .switch__track         { width: 60px; height: 34px; }
+    .switch--lg .switch__track::after  { width: 26px; height: 26px; }
+    .switch--lg .switch__input:checked + .switch__track::after { transform: translateX(26px); }
+
+    /* Color variants */
+    .switch--green  .switch__input:checked + .switch__track { background: #17c964; border-color: #17c964; box-shadow: 0 0 0 3px rgba(23,201,100,.14); }
+    .switch--red    .switch__input:checked + .switch__track { background: #e63530; border-color: #e63530; box-shadow: 0 0 0 3px rgba(230,53,48,.14); }
+    .switch--yellow .switch__input:checked + .switch__track { background: #f5a524; border-color: #f5a524; box-shadow: 0 0 0 3px rgba(245,165,36,.14); }
+
+    .switch__label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+    .switch__sub {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    .switch:has(.switch__input:disabled) {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    /* ════════════════════════════════════
+       Custom Checkbox
+    ════════════════════════════════════ */
+    .checkbox {
+        display: inline-flex;
+        align-items: flex-start;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .checkbox__input {
+        position: absolute;
+        opacity: 0; width: 0; height: 0;
+    }
+
+    .checkbox__box {
+        width: 20px; height: 20px;
+        border-radius: 6px;
+        background: var(--bg-secondary);
+        border: 1.5px solid var(--border-color);
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+        transition: all 0.18s cubic-bezier(0.34, 1.4, 0.64, 1);
+        color: white;
+    }
+
+    .checkbox__box svg { opacity: 0; transform: scale(0.5); transition: all .18s ease; }
+
+    .checkbox__input:checked + .checkbox__box {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(68,70,225,0.14);
+    }
+
+    .checkbox__input:checked + .checkbox__box svg {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .checkbox__input:indeterminate + .checkbox__box {
+        background: var(--accent);
+        border-color: var(--accent);
+    }
+
+    .checkbox__label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.4;
+    }
+
+    .checkbox:has(.checkbox__input:disabled) {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    /* ════════════════════════════════════
+       Custom Radio
+    ════════════════════════════════════ */
+    .radio {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .radio__input {
+        position: absolute;
+        opacity: 0; width: 0; height: 0;
+    }
+
+    .radio__dot {
+        width: 20px; height: 20px;
+        border-radius: 50%;
+        background: var(--bg-secondary);
+        border: 1.5px solid var(--border-color);
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.18s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    .radio__dot::after {
+        content: '';
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: white;
+        opacity: 0; transform: scale(0.4);
+        transition: all .2s cubic-bezier(0.34, 1.6, 0.64, 1);
+    }
+
+    .radio__input:checked + .radio__dot {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(68,70,225,0.14);
+    }
+
+    .radio__input:checked + .radio__dot::after {
+        opacity: 1; transform: scale(1);
+    }
+
+    .radio__label {
+        font-size: 0.9rem; font-weight: 600; color: var(--text-primary);
+    }
+
+    /* ── Settings-row layout ── */
+    .setting-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+    }
+
+    .setting-row + .setting-row { margin-top: 6px; }
+
+    .setting-info { display: flex; flex-direction: column; gap: 2px; }
+</style>
+
+
+<!-- ── 1. Toggle switches ── -->
+<div style="display:flex; flex-direction:column; gap:6px;">
+
+    <div class="setting-row">
+        <div class="setting-info">
+            <span class="switch__label">Уведомления</span>
+            <span class="switch__sub">Push-уведомления о событиях</span>
+        </div>
+        <label class="switch">
+            <input class="switch__input" type="checkbox" checked>
+            <span class="switch__track"></span>
+        </label>
+    </div>
+
+    <div class="setting-row">
+        <div class="setting-info">
+            <span class="switch__label">Тёмная тема</span>
+            <span class="switch__sub">Переключить тему интерфейса</span>
+        </div>
+        <label class="switch switch--green">
+            <input class="switch__input" type="checkbox">
+            <span class="switch__track"></span>
+        </label>
+    </div>
+
+    <div class="setting-row" style="opacity:.5;">
+        <div class="setting-info">
+            <span class="switch__label">Биометрия</span>
+            <span class="switch__sub">Недоступно на этом устройстве</span>
+        </div>
+        <label class="switch">
+            <input class="switch__input" type="checkbox" disabled>
+            <span class="switch__track"></span>
+        </label>
+    </div>
+
+</div>
+
+
+<!-- ── 2. Checkboxes ── -->
+<div style="display:flex; flex-direction:column; gap:10px; padding:16px; background:var(--glass-bg); border:1px solid var(--border-color); border-radius:var(--radius-md);">
+    <div style="font-size:.7rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">Уведомлять о:</div>
+
+    <label class="checkbox">
+        <input class="checkbox__input" type="checkbox" checked>
+        <span class="checkbox__box">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="checkbox__label">Новые мероприятия</span>
+    </label>
+    <label class="checkbox">
+        <input class="checkbox__input" type="checkbox" checked>
+        <span class="checkbox__box">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="checkbox__label">Изменения в расписании</span>
+    </label>
+    <label class="checkbox">
+        <input class="checkbox__input" type="checkbox">
+        <span class="checkbox__box">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="checkbox__label">Системные обновления</span>
+    </label>
+    <label class="checkbox">
+        <input class="checkbox__input" type="checkbox" disabled>
+        <span class="checkbox__box">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="checkbox__label" style="opacity:.5;">SMS (недоступно)</span>
+    </label>
+</div>
+
+
+<!-- ── 3. Radio buttons ── -->
+<div style="display:flex; flex-direction:column; gap:10px; padding:16px; background:var(--glass-bg); border:1px solid var(--border-color); border-radius:var(--radius-md);">
+    <div style="font-size:.7rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">Корпус:</div>
+
+    <label class="radio">
+        <input class="radio__input" type="radio" name="building" checked>
+        <span class="radio__dot"></span>
+        <span class="radio__label">Модерн</span>
+    </label>
+    <label class="radio">
+        <input class="radio__input" type="radio" name="building">
+        <span class="radio__dot"></span>
+        <span class="radio__label">Лицей</span>
+    </label>
+    <label class="radio">
+        <input class="radio__input" type="radio" name="building">
+        <span class="radio__dot"></span>
+        <span class="radio__label">Основной</span>
+    </label>
+    <label class="radio">
+        <input class="radio__input" type="radio" name="building">
+        <span class="radio__dot"></span>
+        <span class="radio__label">Спортивный</span>
+    </label>
+</div>

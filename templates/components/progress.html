@@ -1,0 +1,327 @@
+<!-- =====================================================
+     1409 SDK — Progress & Stepper Snippets
+     ===================================================== -->
+<style>
+    /* ── Linear progress ── */
+    .progress {
+        width: 100%;
+        height: 8px;
+        background: var(--bg-secondary);
+        border-radius: var(--radius-full);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .progress--sm { height: 4px; }
+    .progress--lg { height: 12px; }
+
+    .progress__bar {
+        height: 100%;
+        border-radius: var(--radius-full);
+        background: linear-gradient(90deg, var(--accent), #818cf8);
+        transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        position: relative;
+    }
+
+    /* Shimmer on bar */
+    .progress__bar::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -60%;
+        width: 60%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+        animation: progressShimmer 1.8s ease-in-out infinite;
+    }
+
+    @keyframes progressShimmer {
+        0%   { left: -60%; }
+        100% { left: 110%; }
+    }
+
+    /* Indeterminate */
+    .progress--indeterminate .progress__bar {
+        width: 40% !important;
+        animation: progressIndeterminate 1.5s ease-in-out infinite;
+    }
+    .progress--indeterminate .progress__bar::after { display: none; }
+
+    @keyframes progressIndeterminate {
+        0%   { transform: translateX(-150%); }
+        100% { transform: translateX(350%); }
+    }
+
+    /* Variants */
+    .progress__bar--success { background: linear-gradient(90deg, #17c964, #4ade80); }
+    .progress__bar--warning { background: linear-gradient(90deg, #f5a524, #fbbf24); }
+    .progress__bar--danger  { background: linear-gradient(90deg, #e63530, #f87171); }
+
+    /* ── Progress with label ── */
+    .progress-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .progress-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .progress-label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+    .progress-value {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Circular progress ── */
+    .progress-circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .progress-circle__svg {
+        transform: rotate(-90deg);
+    }
+
+    .progress-circle__track {
+        fill: none;
+        stroke: var(--bg-secondary);
+        stroke-width: 5;
+    }
+
+    .progress-circle__fill {
+        fill: none;
+        stroke: url(#progressGrad);
+        stroke-width: 5;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .progress-circle__label {
+        position: absolute;
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--text-primary);
+    }
+
+    /* ── Stepper ── */
+    .stepper {
+        display: flex;
+        align-items: flex-start;
+        gap: 0;
+        width: 100%;
+    }
+
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        position: relative;
+    }
+
+    /* Connector line */
+    .step:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        top: 16px;
+        left: 50%;
+        width: 100%;
+        height: 2px;
+        background: var(--border-color);
+        z-index: 0;
+        transition: background 0.4s ease;
+    }
+
+    .step.done:not(:last-child)::after {
+        background: var(--accent);
+    }
+
+    .step__dot {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.75rem; font-weight: 800;
+        color: var(--text-muted);
+        position: relative; z-index: 1;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        flex-shrink: 0;
+    }
+
+    .step.done .step__dot {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+        box-shadow: 0 0 0 4px rgba(68,70,225,0.15);
+    }
+
+    .step.active .step__dot {
+        background: var(--bg-hover);
+        border-color: var(--accent);
+        color: var(--accent);
+        box-shadow: 0 0 0 5px rgba(68,70,225,0.12);
+        animation: stepPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes stepPulse {
+        0%,100% { box-shadow: 0 0 0 4px rgba(68,70,225,.12); }
+        50%      { box-shadow: 0 0 0 8px rgba(68,70,225,.06); }
+    }
+
+    .step__label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-top: 7px;
+        text-align: center;
+        transition: color 0.2s;
+    }
+
+    .step.active .step__label { color: var(--text-primary); font-weight: 700; }
+    .step.done   .step__label { color: var(--text-secondary); }
+</style>
+
+
+<!-- ── 1. Linear with label ── -->
+<div class="progress-group">
+    <div class="progress-header">
+        <span class="progress-label">Загрузка профиля</span>
+        <span class="progress-value">72%</span>
+    </div>
+    <div class="progress">
+        <div class="progress__bar" style="width:72%;"></div>
+    </div>
+</div>
+
+<div class="progress-group">
+    <div class="progress-header">
+        <span class="progress-label">Успех</span>
+        <span class="progress-value" style="color:#17c964;">100%</span>
+    </div>
+    <div class="progress">
+        <div class="progress__bar progress__bar--success" style="width:100%;"></div>
+    </div>
+</div>
+
+<div class="progress-group">
+    <div class="progress-header">
+        <span class="progress-label">Ожидание</span>
+        <span class="progress-value" style="color:#f5a524;">45%</span>
+    </div>
+    <div class="progress progress--sm">
+        <div class="progress__bar progress__bar--warning" style="width:45%;"></div>
+    </div>
+</div>
+
+
+<!-- ── 2. Indeterminate ── -->
+<div class="progress-group">
+    <span class="progress-label">Синхронизация...</span>
+    <div class="progress progress--indeterminate">
+        <div class="progress__bar"></div>
+    </div>
+</div>
+
+
+<!-- ── 3. Circular ── -->
+<div style="display:flex; gap:24px; align-items:center; flex-wrap:wrap;">
+    <svg width="0" height="0">
+        <defs>
+            <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#4446E1"/>
+                <stop offset="100%" stop-color="#818cf8"/>
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <div class="progress-circle" id="circ72">
+        <svg class="progress-circle__svg" width="72" height="72" viewBox="0 0 72 72">
+            <circle class="progress-circle__track" cx="36" cy="36" r="30"/>
+            <circle class="progress-circle__fill"  cx="36" cy="36" r="30"
+                stroke-dasharray="188.5"
+                stroke-dashoffset="52.8"/><!-- 188.5*(1-0.72)=52.8 -->
+        </svg>
+        <span class="progress-circle__label">72%</span>
+    </div>
+
+    <div class="progress-circle">
+        <svg class="progress-circle__svg" width="72" height="72" viewBox="0 0 72 72">
+            <circle class="progress-circle__track" cx="36" cy="36" r="30"/>
+            <circle class="progress-circle__fill"  cx="36" cy="36" r="30"
+                stroke="url(#progressGrad)"
+                stroke-dasharray="188.5"
+                stroke-dashoffset="188.5"
+                style="stroke:#17c964;">
+                <animateTransform attributeName="transform" type="rotate" from="0 36 36" to="360 36 36" dur="1.2s" repeatCount="indefinite"/>
+            </circle>
+        </svg>
+        <span class="progress-circle__label" style="font-size:.7rem;color:var(--text-muted);">...</span>
+    </div>
+</div>
+
+
+<!-- ── 4. Stepper ── -->
+<div class="stepper" id="stepper">
+    <div class="step done">
+        <div class="step__dot">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="step__label">Данные</div>
+    </div>
+    <div class="step done">
+        <div class="step__dot">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="step__label">Проверка</div>
+    </div>
+    <div class="step active">
+        <div class="step__dot">3</div>
+        <div class="step__label">Подтверждение</div>
+    </div>
+    <div class="step">
+        <div class="step__dot">4</div>
+        <div class="step__label">Готово</div>
+    </div>
+</div>
+
+<div style="display:flex; gap:8px; justify-content:center;">
+    <button class="btn btn-glass" style="padding:9px 18px;font-size:.85rem;" onclick="stepBack()">← Назад</button>
+    <button class="btn btn-primary" style="padding:9px 18px;font-size:.85rem;" onclick="stepNext()">Далее →</button>
+</div>
+
+<script>
+(function() {
+    let cur = 2; // 0-indexed active step
+    const steps = Array.from(document.querySelectorAll('#stepper .step'));
+
+    function render() {
+        steps.forEach((s, i) => {
+            s.classList.remove('done','active');
+            if (i < cur) {
+                s.classList.add('done');
+                s.querySelector('.step__dot').innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+            } else if (i === cur) {
+                s.classList.add('active');
+                s.querySelector('.step__dot').textContent = i + 1;
+            } else {
+                s.querySelector('.step__dot').textContent = i + 1;
+            }
+        });
+    }
+
+    window.stepNext = () => { if (cur < steps.length - 1) { cur++; render(); } };
+    window.stepBack = () => { if (cur > 0) { cur--; render(); } };
+})();
+</script>

@@ -1,0 +1,217 @@
+<!-- =====================================================
+     1409 SDK — OTP / 2FA Code Input
+     ===================================================== -->
+<style>
+    .otp-wrap {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        padding: 32px 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .otp-icon {
+        width: 56px; height: 56px;
+        background: rgba(68,70,225,0.12);
+        border: 1px solid rgba(68,70,225,0.22);
+        border-radius: var(--radius-lg);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--accent);
+    }
+
+    .otp-title {
+        font-size: 1.15rem;
+        font-weight: 800;
+        text-align: center;
+    }
+
+    .otp-sub {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        text-align: center;
+        margin-top: -16px;
+        line-height: 1.5;
+    }
+
+    .otp-sub strong { color: var(--text-secondary); }
+
+    /* ── 6 boxes ── */
+    .otp-inputs {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .otp-sep {
+        width: 12px; height: 2px;
+        background: var(--border-color);
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+
+    .otp-box {
+        width: 46px; height: 54px;
+        background: var(--bg-secondary);
+        border: 1.5px solid var(--border-color);
+        border-radius: var(--radius-md);
+        text-align: center;
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        caret-color: var(--accent);
+        outline: none;
+        transition: all 0.18s ease;
+        font-family: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    .otp-box:focus {
+        border-color: var(--accent);
+        background: var(--bg-hover);
+        box-shadow: 0 0 0 3px rgba(68,70,225,0.14);
+        transform: scale(1.06);
+    }
+
+    .otp-box.filled {
+        border-color: rgba(68,70,225,0.4);
+        color: var(--accent);
+    }
+
+    .otp-box.error {
+        border-color: #ef4444;
+        animation: otpShake 0.4s ease;
+    }
+
+    @keyframes otpShake {
+        0%,100% { transform: translateX(0); }
+        20%      { transform: translateX(-5px); }
+        40%      { transform: translateX(5px); }
+        60%      { transform: translateX(-4px); }
+        80%      { transform: translateX(4px); }
+    }
+
+    /* ── Submit button ── */
+    .otp-btn {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        border: none; border-radius: var(--radius-md);
+        color: white; font-size: 1rem; font-weight: 700;
+        cursor: pointer; transition: all var(--transition-base);
+        font-family: inherit;
+    }
+    .otp-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(68,70,225,0.35); }
+    .otp-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    /* ── Resend ── */
+    .otp-resend {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        text-align: center;
+    }
+
+    .otp-resend button {
+        background: none; border: none; cursor: pointer;
+        color: var(--accent); font-weight: 700; font-size: inherit;
+        font-family: inherit; padding: 0;
+        transition: opacity 0.2s;
+    }
+    .otp-resend button:disabled { opacity: 0.4; cursor: default; }
+</style>
+
+<div class="otp-wrap">
+
+    <div class="otp-icon">
+        <i data-lucide="shield-check" style="width:26px;height:26px;"></i>
+    </div>
+
+    <div>
+        <div class="otp-title">Введите код</div>
+        <div class="otp-sub">Отправили 6-значный код на<br><strong>+7 (999) *** **42</strong></div>
+    </div>
+
+    <div class="otp-inputs" id="otpInputs">
+        <input class="otp-box" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code">
+        <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+        <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+        <div class="otp-sep"></div>
+        <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+        <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+        <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+    </div>
+
+    <button class="otp-btn" id="otpSubmit" disabled onclick="verifyOtp()">Подтвердить</button>
+
+    <div class="otp-resend">
+        Не пришёл код?
+        <button id="resendBtn" onclick="startResend(this)">Отправить снова</button>
+    </div>
+
+</div>
+
+<script>
+(function() {
+    const boxes = Array.from(document.querySelectorAll('#otpInputs .otp-box'));
+    const submitBtn = document.getElementById('otpSubmit');
+
+    boxes.forEach((box, i) => {
+        box.addEventListener('input', e => {
+            const val = e.target.value.replace(/\D/g, '');
+            box.value = val.slice(-1);
+            box.classList.toggle('filled', !!box.value);
+            if (val && i < boxes.length - 1) boxes[i + 1].focus();
+            submitBtn.disabled = boxes.some(b => !b.value);
+        });
+
+        box.addEventListener('keydown', e => {
+            if (e.key === 'Backspace' && !box.value && i > 0) {
+                boxes[i - 1].value = '';
+                boxes[i - 1].classList.remove('filled');
+                boxes[i - 1].focus();
+                submitBtn.disabled = true;
+            }
+        });
+
+        box.addEventListener('paste', e => {
+            e.preventDefault();
+            const digits = (e.clipboardData.getData('text').replace(/\D/g, '')).slice(0, 6);
+            digits.split('').forEach((d, j) => {
+                if (boxes[j]) { boxes[j].value = d; boxes[j].classList.add('filled'); }
+            });
+            const next = boxes[Math.min(digits.length, boxes.length - 1)];
+            next.focus();
+            submitBtn.disabled = boxes.some(b => !b.value);
+        });
+    });
+
+    boxes[0].focus();
+
+    window.verifyOtp = function() {
+        const code = boxes.map(b => b.value).join('');
+        if (code === '123456') {
+            submitBtn.textContent = '✓ Верно!';
+            submitBtn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
+        } else {
+            boxes.forEach(b => b.classList.add('error'));
+            setTimeout(() => boxes.forEach(b => b.classList.remove('error')), 500);
+        }
+    };
+
+    window.startResend = function(btn) {
+        btn.disabled = true;
+        let s = 30;
+        btn.textContent = `(${s}с)`;
+        const iv = setInterval(() => {
+            s--;
+            btn.textContent = s > 0 ? `(${s}с)` : 'Отправить снова';
+            if (s <= 0) { clearInterval(iv); btn.disabled = false; }
+        }, 1000);
+    };
+})();
+</script>

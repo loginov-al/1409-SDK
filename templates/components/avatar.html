@@ -1,0 +1,187 @@
+<!-- =====================================================
+     1409 SDK — Avatar Component Snippets
+     ===================================================== -->
+<style>
+    /* ── Base ── */
+    .av {
+        border-radius: 50%;
+        object-fit: cover;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        overflow: hidden;
+        position: relative;
+        background: linear-gradient(135deg, var(--accent), #e63530);
+        color: white;
+        border: 2px solid rgba(255,255,255,0.12);
+    }
+
+    .av img {
+        width: 100%; height: 100%;
+        object-fit: cover; display: block;
+    }
+
+    /* Sizes */
+    .av-xs  { width: 22px;  height: 22px;  font-size: 0.55rem; border-width: 1.5px; }
+    .av-sm  { width: 32px;  height: 32px;  font-size: 0.7rem;  }
+    .av-md  { width: 44px;  height: 44px;  font-size: 0.9rem;  }
+    .av-lg  { width: 64px;  height: 64px;  font-size: 1.2rem;  border-width: 3px; }
+    .av-xl  { width: 96px;  height: 96px;  font-size: 1.7rem;  border-width: 3px; }
+    .av-2xl { width: 128px; height: 128px; font-size: 2.2rem;  border-width: 4px; }
+
+    /* Accent border */
+    .av--accent { border-color: var(--accent); border-width: 3px; }
+
+    /* Square (rounded corners) */
+    .av--sq    { border-radius: 30%; }
+    .av-sm.av--sq  { border-radius: 8px; }
+    .av-md.av--sq  { border-radius: 12px; }
+    .av-lg.av--sq  { border-radius: 16px; }
+    .av-xl.av--sq  { border-radius: 22px; }
+
+    /* ── Status dot wrapper ── */
+    .av-wrap {
+        position: relative;
+        display: inline-flex;
+        flex-shrink: 0;
+    }
+
+    .av-status {
+        position: absolute;
+        bottom: 1px; right: 1px;
+        border-radius: 50%;
+        border: 2px solid var(--bg-primary);
+    }
+    .av-xs  + .av-status, .av-wrap .av-xs  ~ .av-status { width: 7px;  height: 7px;  bottom: 0; right: 0; }
+    .av-sm  ~ .av-status { width: 9px;  height: 9px;  }
+    .av-md  ~ .av-status { width: 11px; height: 11px; }
+    .av-lg  ~ .av-status { width: 14px; height: 14px; bottom: 2px; right: 2px; }
+    .av-xl  ~ .av-status { width: 18px; height: 18px; bottom: 3px; right: 3px; }
+
+    .av-status--online  { background: #17c964; box-shadow: 0 0 6px rgba(23,201,100,.6); }
+    .av-status--away    { background: #f5a524; }
+    .av-status--offline { background: rgba(255,255,255,0.25); }
+    .av-status--busy    { background: #e63530; }
+
+    /* ── Tooltip name ── */
+    .av-name {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+    .av-meta {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+    }
+
+    /* ── Group (stacked) ── */
+    .av-group {
+        display: flex;
+        align-items: center;
+    }
+    .av-group .av-wrap + .av-wrap,
+    .av-group .av    + .av {
+        margin-left: -10px;
+    }
+    .av-group .av-wrap { z-index: 1; }
+    .av-group .av-wrap:hover { z-index: 10; }
+
+    .av-group-more {
+        width: 36px; height: 36px;
+        border-radius: 50%;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 0.68rem; font-weight: 800;
+        color: var(--text-muted);
+        margin-left: -10px;
+        flex-shrink: 0;
+    }
+
+    /* ── Row layout ── */
+    .av-row {
+        display: flex; align-items: center; gap: 12px;
+    }
+
+    /* ── Sizes demo row ── */
+    .av-sizes-row {
+        display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    }
+</style>
+
+
+<!-- ── 1. Sizes ── -->
+<div class="av-sizes-row">
+    <div class="av av-xs"><img src="/static/default_avatar.png" alt="xs"></div>
+    <div class="av av-sm"><img src="/static/default_avatar.png" alt="sm"></div>
+    <div class="av av-md"><img src="/static/default_avatar.png" alt="md"></div>
+    <div class="av av-lg"><img src="/static/default_avatar.png" alt="lg"></div>
+    <div class="av av-xl"><img src="/static/default_avatar.png" alt="xl"></div>
+</div>
+
+
+<!-- ── 2. With status dot ── -->
+<div class="av-sizes-row">
+    <div class="av-wrap">
+        <div class="av av-md"><img src="/static/default_avatar.png" alt="online"></div>
+        <span class="av-status av-status--online"></span>
+    </div>
+    <div class="av-wrap">
+        <div class="av av-md"><img src="/static/default_avatar.png" alt="away"></div>
+        <span class="av-status av-status--away"></span>
+    </div>
+    <div class="av-wrap">
+        <div class="av av-md"><img src="/static/default_avatar.png" alt="busy"></div>
+        <span class="av-status av-status--busy"></span>
+    </div>
+    <div class="av-wrap">
+        <div class="av av-md"><img src="/static/default_avatar.png" alt="offline"></div>
+        <span class="av-status av-status--offline"></span>
+    </div>
+</div>
+
+
+<!-- ── 3. With name row ── -->
+<div class="av-row">
+    <div class="av-wrap">
+        <div class="av av-lg"><img src="/static/default_avatar.png" alt="user"></div>
+        <span class="av-status av-status--online"></span>
+    </div>
+    <div>
+        <div class="av-name">Иванов Иван Иванович</div>
+        <div class="av-meta">Учитель · Модерн · Онлайн</div>
+    </div>
+</div>
+
+
+<!-- ── 4. Initials fallback (no image) ── -->
+<div class="av-sizes-row">
+    <div class="av av-md" style="background:linear-gradient(135deg,#4446E1,#e63530);">ИИ</div>
+    <div class="av av-md" style="background:linear-gradient(135deg,#17c964,#0891b2);">АП</div>
+    <div class="av av-md" style="background:linear-gradient(135deg,#f5a524,#e63530);">МС</div>
+    <div class="av av-md" style="background:linear-gradient(135deg,#8b5cf6,#4446E1);">КВ</div>
+</div>
+
+
+<!-- ── 5. Square variant ── -->
+<div class="av-sizes-row">
+    <div class="av av-md av--sq"><img src="/static/default_avatar.png" alt="sq"></div>
+    <div class="av av-lg av--sq"><img src="/static/default_avatar.png" alt="sq-lg"></div>
+    <div class="av av-lg av--sq av--accent"><img src="/static/default_avatar.png" alt="sq-accent"></div>
+</div>
+
+
+<!-- ── 6. Group (stacked) ── -->
+<div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+    <div class="av-group">
+        <div class="av-wrap"><div class="av av-sm"><img src="/static/default_avatar.png" alt="u1"></div></div>
+        <div class="av-wrap"><div class="av av-sm" style="background:linear-gradient(135deg,#17c964,#0891b2);">АП</div></div>
+        <div class="av-wrap"><div class="av av-sm" style="background:linear-gradient(135deg,#f5a524,#e63530);">МС</div></div>
+        <div class="av-wrap"><div class="av av-sm" style="background:linear-gradient(135deg,#8b5cf6,#4446E1);">КВ</div></div>
+        <div class="av-group-more">+8</div>
+    </div>
+    <div class="av-meta">12 участников</div>
+</div>
